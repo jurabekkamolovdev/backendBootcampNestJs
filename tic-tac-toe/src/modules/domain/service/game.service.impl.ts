@@ -1,22 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { IGameService } from './game.service.interface';
 import { Game } from '../model/game.model';
 import { GameBoard } from '../model/game-board.model';
+import type { IGameRepository } from '../../datasource/repository/game.repository.interface';
 
 /**
  * Game Service Implementation
  * Implements the game business logic using Minimax algorithm
+ *
+ * Repository orqali o'yinlarni saqlaydi va oladi
  */
 @Injectable()
 export class GameServiceImpl implements IGameService {
   private readonly PLAYER = 1; // Player (X)
-  private readonly COMPUTER = -1; // Computer (O)
+  private readonly COMPUTER = 2; // Computer (O)
   private readonly EMPTY = 0;
+
+  constructor(
+    @Inject('IGameRepository')
+    private readonly gameRepository: IGameRepository,
+  ) {}
 
   /**
    * Calculate the next move using Minimax algorithm
    */
-  calculateNextMove(game: Game): Game {
+  async calculateNextMove(game: Game): Promise<Game> {
     const board = game.getBoard();
     const bestMove = this.getBestMove(board);
 
@@ -27,10 +35,27 @@ export class GameServiceImpl implements IGameService {
       const updatedGame = game.clone();
       updatedGame.setBoard(newBoard);
 
+      // O'yinni saqlash
+      await this.gameRepository.save(updatedGame);
+
       return updatedGame;
     }
 
     return game;
+  }
+
+  /**
+   * O'yinni ID orqali olish
+   */
+  async getGameById(id: string): Promise<Game | null> {
+    return await this.gameRepository.findById(id);
+  }
+
+  /**
+   * O'yinni saqlash
+   */
+  async saveGame(game: Game): Promise<Game> {
+    return await this.gameRepository.save(game);
   }
 
   /**
@@ -96,25 +121,6 @@ export class GameServiceImpl implements IGameService {
     }
 
     return false;
-  }
-
-  /**
-   * Get the winner
-   */
-  getWinner(game: Game): number | null {
-    const board = game.getBoard();
-    const winner = this.checkWinner(board);
-
-    if (winner !== null) {
-      return winner;
-    }
-
-    // If board is full but no winner, it's a draw
-    if (board.isFull()) {
-      return 0;
-    }
-
-    return null;
   }
 
   /**

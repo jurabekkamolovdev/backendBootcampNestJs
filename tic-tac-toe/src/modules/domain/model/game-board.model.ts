@@ -52,7 +52,7 @@ export class GameBoard {
   }
 
   private validatePosition(row: number, col: number) {
-    if (row < 0 || row >= this.SIZE || col < 0 || col <= this.SIZE) {
+    if (row < 0 || row >= this.SIZE || col < 0 || col >= this.SIZE) {
       throw new Error(`Siz noto'g'ri position yubordingiz ${row} ${col}`);
     }
   }
@@ -76,9 +76,9 @@ export class GameBoard {
   }
 
   private validateValue(value: number): void {
-    if (value !== 0 && value !== 1 && value !== -1) {
+    if (value !== 0 && value !== 1 && value !== 2) {
       throw new Error(
-        `Board ichidagi ${value} xato board ichida 1, 0, -1 bo'lishi kerak`,
+        `Board ichidagi ${value} xato board ichida 0, 1, 2 bo'lishi kerak`,
       );
     }
   }

@@ -7,19 +7,14 @@ import { GameBoard } from './game-board.model';
  * Contains:
  * - Unique identifier (UUID)
  * - Game board (3x3 matrix)
- * - Timestamps for tracking
  */
 export class Game {
   private readonly id: string;
   private board: GameBoard;
-  private readonly createdAt: Date;
-  private updatedAt: Date;
 
   constructor(id: string, board?: GameBoard) {
     this.id = id;
     this.board = board || new GameBoard();
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
   }
 
   /**
@@ -41,21 +36,6 @@ export class Game {
    */
   setBoard(board: GameBoard): void {
     this.board = board;
-    this.updatedAt = new Date();
-  }
-
-  /**
-   * Get creation timestamp
-   */
-  getCreatedAt(): Date {
-    return this.createdAt;
-  }
-
-  /**
-   * Get last update timestamp
-   */
-  getUpdatedAt(): Date {
-    return this.updatedAt;
   }
 
   /**
