@@ -1,7 +1,68 @@
 import { GameBoard } from './game-board.model';
-import { v4 as uuidv4 } from 'uuid';
 
-export class GameModel {
-  board: GameBoard = new GameBoard();
-  gameUUID: string = uuidv4();
+/**
+ * Game Model
+ * Represents a single Tic-Tac-Toe game session
+ *
+ * Contains:
+ * - Unique identifier (UUID)
+ * - Game board (3x3 matrix)
+ * - Timestamps for tracking
+ */
+export class Game {
+  private readonly id: string;
+  private board: GameBoard;
+  private readonly createdAt: Date;
+  private updatedAt: Date;
+
+  constructor(id: string, board?: GameBoard) {
+    this.id = id;
+    this.board = board || new GameBoard();
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+  }
+
+  /**
+   * Get game ID (UUID)
+   */
+  getId(): string {
+    return this.id;
+  }
+
+  /**
+   * Get game board
+   */
+  getBoard(): GameBoard {
+    return this.board;
+  }
+
+  /**
+   * Set game board
+   */
+  setBoard(board: GameBoard): void {
+    this.board = board;
+    this.updatedAt = new Date();
+  }
+
+  /**
+   * Get creation timestamp
+   */
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  /**
+   * Get last update timestamp
+   */
+  getUpdatedAt(): Date {
+    return this.updatedAt;
+  }
+
+  /**
+   * Clone the game
+   */
+  clone(): Game {
+    const clonedGame = new Game(this.id, this.board.clone());
+    return clonedGame;
+  }
 }
