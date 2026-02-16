@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/game/1212
+Content-Type: application/json
+
+{
+  "board": [
+    [1, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+  ]
+}
