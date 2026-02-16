@@ -1,11 +1,22 @@
-import { GameBoardEntity } from './game-board.entity';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-export class GameEntity {
-  id: string;
-  board: GameBoardEntity;
+@Table({
+  tableName: 'game',
+  timestamps: false,
+})
+export class GameModel extends Model {
+  @Column({
+    primaryKey: true,
+    type: DataType.STRING,
+  })
+  declare uuid: string;
 
-  constructor(id: string, board: GameBoardEntity) {
-    this.id = id;
-    this.board = board;
-  }
+  @Column({
+    type: DataType.JSON,
+    allowNull: false,
+  })
+  declare board: {
+    cells: number[][];
+    size: number;
+  };
 }
