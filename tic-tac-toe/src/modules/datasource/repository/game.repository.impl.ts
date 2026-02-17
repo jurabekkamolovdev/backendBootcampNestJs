@@ -25,13 +25,8 @@ export class GameRepositoryImpl implements IGameRepository {
   // }
 
   async save(game: Game): Promise<Game> {
-    await this.gameModel.upsert({
-      uuid: game.getId(),
-      board: {
-        cells: game.getBoard().getBoard(),
-        size: game.getBoard().getSize(),
-      },
-    });
+    const entity = this.gameDataMapper.toEntity(game);
+    await this.gameModel.upsert(entity.get());
 
     return game;
   }
