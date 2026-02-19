@@ -25,7 +25,6 @@ export class GameServiceImpl implements IGameService {
 
       const updatedGame = game.clone();
       updatedGame.setBoard(cloneBoard);
-      // await Promise.resolve();
       await this.gameRepository.save(updatedGame);
       return updatedGame;
     }
@@ -34,13 +33,10 @@ export class GameServiceImpl implements IGameService {
   }
 
   async getGameById(id: string): Promise<Game | null> {
-    // await Promise.resolve(id);
     return await this.gameRepository.findById(id);
   }
 
   async saveGame(game: Game): Promise<Game | null> {
-    // await Promise.resolve(game);
-
     return await this.gameRepository.save(game);
   }
 
