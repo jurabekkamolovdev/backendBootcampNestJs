@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IGameRepository } from './game.repository.interface';
 import { InjectModel } from '@nestjs/sequelize';
 import { GameModel } from '../model/game.entity';
-import { Game } from '../../domain/model/game.model';
+import { Game } from '../../../domain/game/model/game.model';
 import { GameDataMapper } from '../mapper/game-data.mapper';
 
 @Injectable()

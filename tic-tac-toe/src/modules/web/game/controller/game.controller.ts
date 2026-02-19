@@ -8,11 +8,11 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { GameWebMapper } from '../mapper/game-web.mapper';
-import type { IGameService } from '../../domain/service/game.service.interface';
+import type { IGameService } from '../../../domain/game/service/game.service.interface';
 import { GameMoveRequest } from '../model/request/game-move.request.dto';
 import { GameResponseDto } from '../model/response/game.response.dto';
-import { Game } from '../../domain/model/game.model';
-import { GameBoard } from '../../domain/model/game-board.model';
+import { Game } from '../../../domain/game/model/game.model';
+import { GameBoard } from '../../../domain/game/model/game-board.model';
 
 @Controller('game')
 export class GameController {

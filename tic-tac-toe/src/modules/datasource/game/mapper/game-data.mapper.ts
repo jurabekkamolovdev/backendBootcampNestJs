@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Game } from '../../domain/model/game.model';
-import { GameBoard } from '../../domain/model/game-board.model';
+import { Game } from '../../../domain/game/model/game.model';
+import { GameBoard } from '../../../domain/game/model/game-board.model';
 import { GameModel } from '../model/game.entity';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { Game } from '../../domain/model/game.model';
+import { Game } from '../../../domain/game/model/game.model';
 
 export interface IGameRepository {
   save(game: Game): Promise<Game>;

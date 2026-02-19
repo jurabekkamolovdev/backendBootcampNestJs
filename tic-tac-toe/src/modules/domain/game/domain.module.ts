@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GameServiceImpl } from './service/game.service.impl';
-import { DatasourceModule } from '../datasource/datasource.module';
+import { DatasourceModule } from '../../datasource/game/datasource.module';
 
 @Module({
   imports: [DatasourceModule],

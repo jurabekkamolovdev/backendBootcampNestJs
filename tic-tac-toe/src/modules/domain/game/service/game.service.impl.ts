@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { IGameService } from './game.service.interface';
 import { Game } from '../model/game.model';
 import { GameBoard } from '../model/game-board.model';
-import type { IGameRepository } from '../../datasource/repository/game.repository.interface';
+import type { IGameRepository } from '../../../datasource/game/repository/game.repository.interface';
 
 @Injectable()
 export class GameServiceImpl implements IGameService {

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { WebModule } from './modules/web/web.module';
+import { WebModule } from './modules/web/game/web.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { GameModel } from './modules/datasource/model/game.entity';
+import { GameModel } from './modules/datasource/game/model/game.entity';
 
 @Module({
   imports: [
