@@ -18,11 +18,7 @@ export class UserServiceImpl implements IUserService {
   async login(authHeader: string): Promise<{ access_token: string }> {
     const base64Credentials = authHeader.replace('Basic ', '');
     const decode = Buffer.from(base64Credentials, 'base64').toString('utf-8');
-    console.log(base64Credentials);
-    console.log(decode);
     const [login, password] = decode.split(':');
-
-    console.log(login, password);
 
     const user = await this.userRepository.findByLogin(login);
 

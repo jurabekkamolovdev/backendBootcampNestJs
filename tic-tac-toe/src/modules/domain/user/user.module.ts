@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { UserServiceImpl } from './service/user.service.imp';
 import { UserRepositoryModule } from '../../datasource/user/user.repository.module';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
   imports: [
     UserRepositoryModule,
+    PassportModule,
     JwtModule.register({
       global: true,
       secret: 'jwt_token',
@@ -17,7 +20,8 @@ import { JwtModule } from '@nestjs/jwt';
       provide: 'IUserService',
       useClass: UserServiceImpl,
     },
+    JwtStrategy,
   ],
-  exports: ['IUserService'],
+  exports: ['IUserService', JwtStrategy],
 })
 export class UserModule {}
