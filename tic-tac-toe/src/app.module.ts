@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { WebModule } from './modules/web/game/web.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { GameModel } from './modules/datasource/game/model/game.entity';
-import { UserModule } from './modules/domain/user/user.module';
 import { AuthModule } from './modules/web/auth/auth.module';
+import { UserModel } from './modules/datasource/user/model/user.entity';
 
 @Module({
   imports: [
@@ -14,12 +14,11 @@ import { AuthModule } from './modules/web/auth/auth.module';
       username: 'turnerko',
       password: '2002',
       database: 'games',
-      models: [GameModel],
+      models: [GameModel, UserModel],
       autoLoadModels: true,
       synchronize: true,
     }),
     WebModule,
-    UserModule,
     AuthModule,
   ],
 })

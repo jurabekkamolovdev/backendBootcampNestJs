@@ -20,6 +20,10 @@ export class User {
     return this.login;
   }
 
+  getPassword(): string {
+    return this.password;
+  }
+
   async verifyPassword(password: string) {
     return await bcrypt.compare(password, this.password);
   }

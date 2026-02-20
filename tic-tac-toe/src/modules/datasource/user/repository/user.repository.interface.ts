@@ -1,0 +1,5 @@
+import { User } from '../../../domain/user/model/user.model';
+
+export interface IUserRepository {
+  save(user: User): Promise<User>;
+}

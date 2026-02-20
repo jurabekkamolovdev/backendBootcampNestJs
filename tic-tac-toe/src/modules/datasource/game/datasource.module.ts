@@ -7,7 +7,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
 @Module({
   imports: [SequelizeModule.forFeature([GameModel])],
   providers: [
-    // GameStorage,
     GameDataMapper,
     {
       provide: 'IGameRepository',
