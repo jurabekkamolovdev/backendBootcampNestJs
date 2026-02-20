@@ -18,4 +18,15 @@ export class UserRepositoryImpl implements IUserRepository {
     await this.userModel.create(userEntity.get());
     return user;
   }
+
+  async findByLogin(login: string): Promise<User> {
+    const userModel = await this.userModel.findOne({
+      where: { login },
+    });
+
+    if (!userModel) {
+      throw new Error('User not found');
+    }
+    return this.userDataMapper.toDomain(userModel);
+  }
 }

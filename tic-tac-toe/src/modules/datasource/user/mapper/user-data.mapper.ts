@@ -11,4 +11,8 @@ export class UserDataMapper {
       password: user.getPassword(),
     });
   }
+
+  toDomain(user: UserModel): User {
+    return User.restore(user.uuid, user.login, user.password);
+  }
 }
