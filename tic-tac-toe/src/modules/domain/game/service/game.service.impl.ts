@@ -15,26 +15,26 @@ export class GameServiceImpl implements IGameService {
     private readonly gameRepository: IGameRepository,
   ) {}
 
-  async calculateNextMove(game: Game): Promise<Game> {
-    const board = game.getBoard();
-    const bestMove = this.getBestMove(board);
+  // async calculateNextMove(game: Game): Promise<Game> {
+  //   const board = game.getBoard();
+  //   const bestMove = this.getBestMove(board);
+  //
+  //   if (bestMove) {
+  //     const cloneBoard = board.clone();
+  //     cloneBoard.setCell(bestMove.row, bestMove.col, this.COMPUTER);
+  //
+  //     const updatedGame = game.clone();
+  //     updatedGame.setBoard(cloneBoard);
+  //     await this.gameRepository.save(updatedGame);
+  //     return updatedGame;
+  //   }
+  //
+  //   return game;
+  // }
 
-    if (bestMove) {
-      const cloneBoard = board.clone();
-      cloneBoard.setCell(bestMove.row, bestMove.col, this.COMPUTER);
-
-      const updatedGame = game.clone();
-      updatedGame.setBoard(cloneBoard);
-      await this.gameRepository.save(updatedGame);
-      return updatedGame;
-    }
-
-    return game;
-  }
-
-  async getGameById(id: string): Promise<Game | null> {
-    return await this.gameRepository.findById(id);
-  }
+  // async getGameById(id: string): Promise<Game | null> {
+  //   return await this.gameRepository.findById(id);
+  // }
 
   async saveGame(game: Game): Promise<Game | null> {
     return await this.gameRepository.save(game);

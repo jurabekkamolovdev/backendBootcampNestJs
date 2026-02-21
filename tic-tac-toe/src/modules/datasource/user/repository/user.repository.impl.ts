@@ -29,4 +29,16 @@ export class UserRepositoryImpl implements IUserRepository {
     }
     return this.userDataMapper.toDomain(userModel);
   }
+
+  async findById(uuid: string): Promise<User> {
+    const userModel = await this.userModel.findOne({
+      where: { uuid },
+    });
+
+    if (!userModel) {
+      throw new Error('User not found');
+    }
+
+    return this.userDataMapper.toDomain(userModel);
+  }
 }

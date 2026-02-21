@@ -14,11 +14,23 @@
 #
 #{
 #  "login": "jsk101dev",
-#  "password": "91@Kj"
+#  "password": "9140656@Kj"
 #}
 
-#POST http://localhost:3000/api/auth/login
-#Authorization: Basic amtzMjAyZGV2OjkxNDA2NTZAS2o=
 
-GET http://localhost:3000/api/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4OWNlZmRmNy1lNzU2LTQ4MTUtOWJlNy0xZjY4NTVjNDdkODMiLCJsb2dpbiI6ImprczIwMmRldiIsImlhdCI6MTc3MTU4OTM2NSwiZXhwIjoxNzcxNjc1NzY1fQ.ACfngjbsxYX3iQNkbU8vx6kO72jqIVpGlhxYB7x1-gk
+#POST http://localhost:3000/api/auth/login
+#Authorization: Basic anNrMTAxZGV2OjkxNDA2NTZAS2o=
+
+
+POST http://localhost:3000/api/game
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YzgxZjE2Yy1iYWQ1LTRmOTQtODJiNy03YTg5ZDZhNTljYWUiLCJpYXQiOjE3NzE2Njk5NjQsImV4cCI6MTc3MTc1NjM2NH0.G4bYFOJ3wfjr2zQF0Qr6faNI_Vgq1Gc5x-X1pYZslO0
+Content-Type: application/json
+
+{
+  "mode": "USER",
+  "board": [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+  ]
+}

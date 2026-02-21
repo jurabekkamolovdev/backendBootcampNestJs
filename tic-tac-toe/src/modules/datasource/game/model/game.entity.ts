@@ -1,7 +1,7 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({
-  tableName: 'game',
+  tableName: 'games',
   timestamps: false,
 })
 export class GameModel extends Model {
@@ -19,4 +19,38 @@ export class GameModel extends Model {
     cells: number[][];
     size: number;
   };
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare playerIdX: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare playerId0: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare status: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare currentPlayerId: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare winnerUserId: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare mode: 'USER' | 'COMPUTER';
 }

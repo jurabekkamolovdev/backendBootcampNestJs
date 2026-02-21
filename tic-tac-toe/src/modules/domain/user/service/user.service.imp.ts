@@ -28,10 +28,14 @@ export class UserServiceImpl implements IUserService {
       throw new Error('Invalid password');
     }
 
-    const payload = { sub: user.getId(), login: user.getLogin() };
+    const payload = { sub: user.getId() };
 
     const access_token = await this.jwtService.signAsync(payload);
 
     return { access_token };
+  }
+
+  async getUserById(id: string): Promise<User> {
+    return await this.userRepository.findById(id);
   }
 }

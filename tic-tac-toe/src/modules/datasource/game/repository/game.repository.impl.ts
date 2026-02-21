@@ -55,20 +55,20 @@ export class GameRepositoryImpl implements IGameRepository {
   //
   //   return game;
   // }
-  async findById(id: string): Promise<Game | null> {
-    const entity = await this.gameModel.findByPk(id);
+  // async findById(id: string): Promise<Game | null> {
+  //   const entity = await this.gameModel.findByPk(id);
+  //
+  //   if (!entity) {
+  //     return null;
+  //   }
+  //
+  //   await Promise.resolve();
+  //
+  //   return this.gameDataMapper.toDomain(entity);
+  // }
 
-    if (!entity) {
-      return null;
-    }
-
-    await Promise.resolve();
-
-    return this.gameDataMapper.toDomain(entity);
-  }
-
-  async delete(id: string): Promise<boolean> {
-    const deleted = await this.gameModel.destroy({ where: { uuid: id } });
-    return deleted > 0;
-  }
+  // async delete(id: string): Promise<boolean> {
+  //   const deleted = await this.gameModel.destroy({ where: { uuid: id } });
+  //   return deleted > 0;
+  // }
 }

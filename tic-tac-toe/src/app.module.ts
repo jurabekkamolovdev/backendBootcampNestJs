@@ -13,7 +13,7 @@ import { UserModel } from './modules/datasource/user/model/user.entity';
       port: 5432,
       username: 'turnerko',
       password: '2002',
-      database: 'games',
+      database: 'tic-tac-toe',
       models: [GameModel, UserModel],
       autoLoadModels: true,
       synchronize: true,
