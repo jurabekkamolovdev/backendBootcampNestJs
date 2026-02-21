@@ -1,14 +1,3 @@
-#POST http://localhost:3000/api/game/bbb
-#Content-Type: application/json
-#
-#{
-#  "board": [
-#    [2, 1, 2],
-#    [1, 0, 0],
-#    [2, 1, 1]
-#  ]
-#}
-
 #POST http://localhost:3000/api/auth/signup
 #Content-Type: application/json
 #

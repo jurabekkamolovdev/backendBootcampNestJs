@@ -85,11 +85,11 @@ export class GameController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createNewGame(
-    @Request() req: { user: { userId: string } },
+    @Request() req: { user: { id: string } },
     @Body() gameDto: GameRequest,
   ): Promise<Game | null> {
-    console.log(req.user.userId);
-    const user = await this.userService.getUserById(req.user.userId);
+    console.log(req.user.id);
+    const user = await this.userService.getUserById(req.user.id);
     console.log(user);
     const newGame = this.gameWebMapper.requestToDomain(user, gameDto);
 
