@@ -11,13 +11,12 @@ export class Game {
   private currentPlayer: User | null;
   private winnerUser: User | null;
   private mode: GameMod;
-
-  constructor(user: User, mode: GameMod, gameBoard?: GameBoard) {
+  constructor(user: User, mode: GameMod, gameBoard?: GameBoard, id?: string) {
     this.playerX = user;
     this.mode = mode;
     this.board = gameBoard || new GameBoard();
     this.status = GameStatus.WAITING;
-    this.id = uuid4();
+    this.id = id ? id : uuid4();
   }
 
   getId(): string {
@@ -52,6 +51,18 @@ export class Game {
     return this.mode;
   }
 
+  setPlayer0(user: User) {
+    this.player0 = user;
+  }
+
+  setStatus(status: GameStatus) {
+    this.status = status;
+  }
+
+  // static restore(gameId, gameBoard: GameBoard, userId: string, mode: GameMod) {
+  //   const user = new User();
+  // }
+
   setBoard(board: GameBoard) {
     this.board = board;
   }
@@ -71,4 +82,15 @@ export enum GameStatus {
 export enum GameMod {
   USER = 'USER',
   COMPUTER = 'COMPUTER',
+}
+
+export interface IGame {
+  gameId: string;
+  board: GameBoard;
+  playerX: null | string;
+  player0: null | string;
+  status: GameStatus;
+  currentPlayer: User | null | string;
+  winnerUser: User | null | string;
+  mode: GameMod;
 }

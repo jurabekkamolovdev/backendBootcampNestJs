@@ -1,8 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IGameService } from './game.service.interface';
-import { Game } from '../model/game.model';
+import type { IUserService } from '../../user/service/user.service.interface';
+import { Game, GameStatus } from '../model/game.model';
 import { GameBoard } from '../model/game-board.model';
 import type { IGameRepository } from '../../../datasource/game/repository/game.repository.interface';
+import { IGameService } from './game.service.interface';
 
 @Injectable()
 export class GameServiceImpl implements IGameService {
@@ -13,6 +14,8 @@ export class GameServiceImpl implements IGameService {
   constructor(
     @Inject('IGameRepository')
     private readonly gameRepository: IGameRepository,
+    @Inject('IUserService')
+    private readonly userService: IUserService,
   ) {}
 
   // async calculateNextMove(game: Game): Promise<Game> {
@@ -36,8 +39,35 @@ export class GameServiceImpl implements IGameService {
   //   return await this.gameRepository.findById(id);
   // }
 
-  async saveGame(game: Game): Promise<Game | null> {
+  async createNewGame(game: Game): Promise<Game> {
     return await this.gameRepository.save(game);
+  }
+
+  async joinGame(userId: string, gameId: string): Promise<Game | null> {
+    const game = await this.gameRepository.findById(gameId);
+
+    if (!game) {
+      return null;
+    }
+
+    const playerX = await this.userService.getUserById(userId);
+
+    if (!playerX) {
+      return null;
+    }
+
+    const player0 = await this.userService.getUserById(userId);
+
+    if (!player0) {
+      return null;
+    }
+
+    const newGame: Game = new Game(playerX, game.mode, game.board, game.gameId);
+
+    newGame.setPlayer0(player0);
+    newGame.setStatus(GameStatus.IN_PROGRESS);
+
+    return newGame;
   }
 
   isGameOver(game: Game): boolean {

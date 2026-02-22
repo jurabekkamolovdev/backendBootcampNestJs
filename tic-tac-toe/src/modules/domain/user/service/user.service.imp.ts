@@ -35,7 +35,7 @@ export class UserServiceImpl implements IUserService {
     return { access_token };
   }
 
-  async getUserById(id: string): Promise<User> {
+  async getUserById(id: string): Promise<User | null> {
     return await this.userRepository.findById(id);
   }
 }

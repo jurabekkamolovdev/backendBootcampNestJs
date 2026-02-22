@@ -1,2 +1,7 @@
 POST http://localhost:3000/api/auth/login
 Authorization: Basic anNrMTAxZGV2OjkxNDA2NTZAS2o=
+
+###
+
+POST http://localhost:3000/api/auth/login
+Authorization: Basic anNrMjAyZGV2OjUxMjc2MjBAS2o=

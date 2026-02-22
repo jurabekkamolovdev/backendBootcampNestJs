@@ -9,5 +9,7 @@ export interface IGameService {
 
   // getGameById(id: string): Promise<Game | null>;
 
-  saveGame(game: Game): Promise<Game | null>;
+  createNewGame(game: Game): Promise<Game>;
+
+  joinGame(userId: string, gameId: string): Promise<Game | null>;
 }

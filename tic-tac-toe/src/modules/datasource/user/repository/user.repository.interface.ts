@@ -5,5 +5,5 @@ export interface IUserRepository {
 
   findByLogin(login: string): Promise<User>;
 
-  findById(uuid: string): Promise<User>;
+  findById(uuid: string): Promise<User | null>;
 }

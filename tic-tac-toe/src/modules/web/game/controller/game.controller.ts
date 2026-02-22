@@ -8,6 +8,7 @@ import {
   UseGuards,
   // HttpException,
   Request,
+  Param,
 } from '@nestjs/common';
 import { GameWebMapper } from '../mapper/game-web.mapper';
 import type { IGameService } from '../../../domain/game/service/game.service.interface';
@@ -20,6 +21,7 @@ import { Game } from '../../../domain/game/model/game.model';
 // import { GameBoard } from '../../../domain/game/model/game-board.model';
 import { JwtAuthGuard } from '../../../domain/user/guard/jwt-auth.guard';
 import type { IUserService } from '../../../domain/user/service/user.service.interface';
+import { GameResponseDto } from '../model/response/game.response.dto';
 
 @Controller('game')
 export class GameController {
@@ -87,12 +89,24 @@ export class GameController {
   async createNewGame(
     @Request() req: { user: { id: string } },
     @Body() gameDto: GameRequest,
-  ): Promise<Game | null> {
-    console.log(req.user.id);
+  ): Promise<GameResponseDto | null> {
     const user = await this.userService.getUserById(req.user.id);
-    console.log(user);
-    const newGame = this.gameWebMapper.requestToDomain(user, gameDto);
+    if (!user) {
+      return null;
+    }
+    const domainGame = this.gameWebMapper.requestToDomain(user, gameDto);
+    const game = await this.gameService.createNewGame(domainGame);
+    return this.gameWebMapper.domainToResponse(game);
+  }
 
-    return await this.gameService.saveGame(newGame);
+  @UseGuards(JwtAuthGuard)
+  @Post(':gameId/join')
+  async joinGame(
+    @Request() req: { user: { id: string } },
+    @Param('gameId') gameId: string,
+  ): Promise<Game | null> {
+    console.log(req.user);
+    console.log(gameId);
+    return await this.gameService.joinGame(req.user.id, gameId);
   }
 }

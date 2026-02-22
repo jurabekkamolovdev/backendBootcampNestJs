@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import {
   Game,
+  GameMod,
+  GameStatus,
+  IGame,
   // GameMod,
   // GameStatus,
 } from '../../../domain/game/model/game.model';
-// import { GameBoard } from '../../../domain/game/model/game-board.model';
+import { GameBoard } from '../../../domain/game/model/game-board.model';
 import { GameModel } from '../model/game.entity';
 
 @Injectable()
@@ -25,17 +28,17 @@ export class GameDataMapper {
     });
   }
 
-  // toDomain(entity: GameModel): Game {
-  //   const domainBoard = new GameBoard(entity.board.cells);
-  //
-  //   const game = new Game(entity.uuid, domainBoard);
-  //   game.setStatusRaw(entity.status as GameStatus);
-  //   game.setModeRaw(entity.mode as GameMod);
-  //   game.setPlayerXId(entity.playerIdX);
-  //   game.setPlayer0Id(entity.playerId0);
-  //   game.setCurrentPlayerId(entity.currentPlayerId);
-  //   game.setWinnerUserId(entity.winnerUserId);
-  //
-  //   return game;
-  // }
+  toDomain(entity: GameModel): IGame {
+    const gameBoard = new GameBoard(entity.board.cells);
+    return {
+      gameId: entity.uuid,
+      board: gameBoard,
+      playerX: entity.playerIdX,
+      player0: null,
+      status: entity.status as GameStatus,
+      currentPlayer: entity.currentPlayerId,
+      winnerUser: entity.winnerUserId,
+      mode: entity.mode as GameMod,
+    };
+  }
 }

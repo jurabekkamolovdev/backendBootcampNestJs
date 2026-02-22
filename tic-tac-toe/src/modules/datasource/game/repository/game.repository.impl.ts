@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IGameRepository } from './game.repository.interface';
 import { InjectModel } from '@nestjs/sequelize';
 import { GameModel } from '../model/game.entity';
-import { Game } from '../../../domain/game/model/game.model';
+import { Game, IGame } from '../../../domain/game/model/game.model';
 import { GameDataMapper } from '../mapper/game-data.mapper';
 
 @Injectable()
@@ -55,17 +55,15 @@ export class GameRepositoryImpl implements IGameRepository {
   //
   //   return game;
   // }
-  // async findById(id: string): Promise<Game | null> {
-  //   const entity = await this.gameModel.findByPk(id);
-  //
-  //   if (!entity) {
-  //     return null;
-  //   }
-  //
-  //   await Promise.resolve();
-  //
-  //   return this.gameDataMapper.toDomain(entity);
-  // }
+  async findById(id: string): Promise<IGame | null> {
+    const entity = await this.gameModel.findByPk(id);
+
+    if (!entity) {
+      return null;
+    }
+
+    return this.gameDataMapper.toDomain(entity);
+  }
 
   // async delete(id: string): Promise<boolean> {
   //   const deleted = await this.gameModel.destroy({ where: { uuid: id } });
