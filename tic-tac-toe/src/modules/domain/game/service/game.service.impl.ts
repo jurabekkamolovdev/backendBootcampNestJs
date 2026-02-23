@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import type { IUserService } from '../../user/service/user.service.interface';
-import { Game, GameStatus } from '../model/game.model';
+import { Game, GameStatus, IGame } from '../model/game.model';
 import { GameBoard } from '../model/game-board.model';
 import type { IGameRepository } from '../../../datasource/game/repository/game.repository.interface';
 import { IGameService } from './game.service.interface';
@@ -35,9 +35,21 @@ export class GameServiceImpl implements IGameService {
   //   return game;
   // }
 
-  // async getGameById(id: string): Promise<Game | null> {
-  //   return await this.gameRepository.findById(id);
-  // }
+  async getGameById(id: string): Promise<Game | null> {
+    const Igame = await this.gameRepository.findById(id);
+
+    if (!Igame) {
+      return null;
+    }
+
+    const game = await this.toDomain(Igame);
+
+    if (!game) {
+      return null;
+    }
+
+    return game;
+  }
 
   async createNewGame(game: Game): Promise<Game> {
     return await this.gameRepository.save(game);
@@ -49,23 +61,16 @@ export class GameServiceImpl implements IGameService {
     if (!game) {
       return null;
     }
+    game.playerId0 = userId;
+    const newGame = await this.toDomain(game);
 
-    const playerX = await this.userService.getUserById(userId);
-
-    if (!playerX) {
+    if (!newGame) {
       return null;
     }
 
-    const player0 = await this.userService.getUserById(userId);
-
-    if (!player0) {
-      return null;
-    }
-
-    const newGame: Game = new Game(playerX, game.mode, game.board, game.gameId);
-
-    newGame.setPlayer0(player0);
     newGame.setStatus(GameStatus.IN_PROGRESS);
+
+    await this.gameRepository.save(newGame);
 
     return newGame;
   }
@@ -196,6 +201,32 @@ export class GameServiceImpl implements IGameService {
     }
 
     return null;
+  }
+
+  private async toDomain(game: IGame): Promise<Game | null> {
+    if (!game.playerIdX) {
+      console.log(11);
+      return null;
+    }
+    const playerX = await this.userService.getUserById(game.playerIdX);
+    if (!playerX) {
+      console.log(12);
+      return null;
+    }
+
+    if (!game.playerId0) {
+      console.log(13);
+      return null;
+    }
+    const player0 = await this.userService.getUserById(game.playerId0);
+    if (!player0) {
+      console.log(14);
+      return null;
+    }
+    const domain = new Game(playerX, game.mode, game.board, game.gameId);
+
+    domain.setPlayer0(player0);
+    return domain;
   }
 
   validateGameBoard(newGame: Game, previousGame: Game): boolean {

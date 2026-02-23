@@ -7,7 +7,7 @@ export interface IGameService {
 
   isGameOver(game: Game): boolean;
 
-  // getGameById(id: string): Promise<Game | null>;
+  getGameById(id: string): Promise<Game | null>;
 
   createNewGame(game: Game): Promise<Game>;
 

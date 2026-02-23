@@ -8,11 +8,12 @@ export class Game {
   private playerX: User | null;
   private player0: User | null;
   private status: GameStatus;
-  private currentPlayer: User | null;
+  private currentPlayer: User;
   private winnerUser: User | null;
   private mode: GameMod;
   constructor(user: User, mode: GameMod, gameBoard?: GameBoard, id?: string) {
     this.playerX = user;
+    this.currentPlayer = this.playerX;
     this.mode = mode;
     this.board = gameBoard || new GameBoard();
     this.status = GameStatus.WAITING;
@@ -40,7 +41,7 @@ export class Game {
   }
 
   getCurrentPlayer() {
-    return this.currentPlayer;
+    return this.currentPlayer.getId();
   }
 
   getWinnerUser() {
@@ -87,10 +88,10 @@ export enum GameMod {
 export interface IGame {
   gameId: string;
   board: GameBoard;
-  playerX: null | string;
-  player0: null | string;
+  playerIdX: null | string;
+  playerId0: null | string;
   status: GameStatus;
-  currentPlayer: User | null | string;
+  currentPlayerId: string;
   winnerUser: User | null | string;
   mode: GameMod;
 }

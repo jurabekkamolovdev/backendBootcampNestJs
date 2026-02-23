@@ -13,6 +13,12 @@ export class GameWebMapper {
   }
 
   domainToResponse(game: Game) {
-    return new GameResponseDto(game.getId(), game.getBoard().getBoard());
+    return new GameResponseDto(
+      game.getId(),
+      game.getBoard().getBoard(),
+      game.getPlayerX()?.getId() ?? null,
+      game.getPlayer0()?.getId() ?? null,
+      game.getCurrentPlayer() ?? null,
+    );
   }
 }

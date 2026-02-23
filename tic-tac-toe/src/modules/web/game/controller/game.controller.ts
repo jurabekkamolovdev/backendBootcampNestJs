@@ -17,7 +17,7 @@ import {
   GameRequest,
 } from '../model/request/game-move.request.dto';
 // import { GameResponseDto } from '../model/response/game.response.dto';
-import { Game } from '../../../domain/game/model/game.model';
+// import { Game } from '../../../domain/game/model/game.model';
 // import { GameBoard } from '../../../domain/game/model/game-board.model';
 import { JwtAuthGuard } from '../../../domain/user/guard/jwt-auth.guard';
 import type { IUserService } from '../../../domain/user/service/user.service.interface';
@@ -104,9 +104,35 @@ export class GameController {
   async joinGame(
     @Request() req: { user: { id: string } },
     @Param('gameId') gameId: string,
-  ): Promise<Game | null> {
-    console.log(req.user);
-    console.log(gameId);
-    return await this.gameService.joinGame(req.user.id, gameId);
+  ): Promise<GameResponseDto | null> {
+    console.log(12);
+    const game = await this.gameService.joinGame(req.user.id, gameId);
+
+    if (!game) {
+      return null;
+    }
+
+    console.log(game);
+    return this.gameWebMapper.domainToResponse(game);
   }
+
+  // @UseGuards(JwtAuthGuard)
+  // @Post(':gameId')
+  // async makeMove(
+  //   @Request() req: { user: { id: string } },
+  //   @Param('gameId') gameId: string,
+  //   @Body() gameDto: GameRequest,
+  // ) {
+  //   const game = await this.gameService.getGameById(gameId);
+  //   console.log(gameDto);
+  //   if (!game) {
+  //     return null;
+  //   }
+  //
+  //   if (game.getCurrentPlayer() !== req.user.id) {
+  //     return null;
+  //   }
+  //
+  //   return 'Hello';
+  // }
 }
