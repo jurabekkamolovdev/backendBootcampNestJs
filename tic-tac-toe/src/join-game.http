@@ -1,2 +1,2 @@
-POST http://localhost:3000/api/game/98964681-c854-44a6-802e-a89fcfadbdb3/join
+POST http://localhost:3000/api/game/fb0a79b9-0854-4d77-8f01-1dd2151eec69/join
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3Mjg3NDEzOC02YjNmLTRlYzEtYjAxZS00MzdkZjY3MGE0YjMiLCJpYXQiOjE3NzE4NTA2ODEsImV4cCI6MTc3MTkzNzA4MX0.hw28LTRShqnxmdazZxLFxNvsuDhcmi-T-mWIhyZ8_bU

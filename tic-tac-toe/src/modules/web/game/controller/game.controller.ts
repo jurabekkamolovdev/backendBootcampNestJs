@@ -105,10 +105,11 @@ export class GameController {
     @Request() req: { user: { id: string } },
     @Param('gameId') gameId: string,
   ): Promise<GameResponseDto | null> {
-    console.log(12);
+
     const game = await this.gameService.joinGame(req.user.id, gameId);
 
     if (!game) {
+      console.log(12);
       return null;
     }
 
@@ -116,23 +117,24 @@ export class GameController {
     return this.gameWebMapper.domainToResponse(game);
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Post(':gameId')
-  // async makeMove(
-  //   @Request() req: { user: { id: string } },
-  //   @Param('gameId') gameId: string,
-  //   @Body() gameDto: GameRequest,
-  // ) {
-  //   const game = await this.gameService.getGameById(gameId);
-  //   console.log(gameDto);
-  //   if (!game) {
-  //     return null;
-  //   }
-  //
-  //   if (game.getCurrentPlayer() !== req.user.id) {
-  //     return null;
-  //   }
-  //
-  //   return 'Hello';
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Post(':gameId')
+  async makeMove(
+    @Request() req: { user: { id: string } },
+    @Param('gameId') gameId: string,
+    @Body() gameDto: GameRequest,
+  ) {
+    console.log(gameId);
+    const game = await this.gameService.getGameById(gameId);
+    console.log(gameDto);
+    if (!game) {
+      return null;
+    }
+
+    if (game.getCurrentPlayer() !== req.user.id) {
+      return null;
+    }
+
+    return 'Hello';
+  }
 }

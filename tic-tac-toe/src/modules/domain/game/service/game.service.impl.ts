@@ -38,6 +38,7 @@ export class GameServiceImpl implements IGameService {
   async getGameById(id: string): Promise<Game | null> {
     const Igame = await this.gameRepository.findById(id);
 
+    console.log(Igame);
     if (!Igame) {
       return null;
     }

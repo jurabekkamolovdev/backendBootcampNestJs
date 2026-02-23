@@ -34,7 +34,7 @@ export class GameDataMapper {
       gameId: entity.uuid,
       board: gameBoard,
       playerIdX: entity.playerIdX,
-      playerId0: null,
+      playerId0: entity.playerId0,
       status: entity.status as GameStatus,
       currentPlayerId: entity.currentPlayerId,
       winnerUser: entity.winnerUserId,
