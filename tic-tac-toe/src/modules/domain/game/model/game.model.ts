@@ -26,6 +26,13 @@ export class Game {
     };
   }
 
+  setCurrentPlayer(id: string | null, role: PlayerRole): void {
+    this.currentPlayer = {
+      id: id,
+      role: role,
+    };
+  }
+
   getCurrentPlayerId() {
     return this.currentPlayer.id;
   }

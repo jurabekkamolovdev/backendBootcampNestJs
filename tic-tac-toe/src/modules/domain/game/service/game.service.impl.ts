@@ -57,14 +57,19 @@ export class GameServiceImpl implements IGameService {
   ): Promise<Game | null> {
     const IGame = await this.gameRepository.findById(gameId);
     if (!IGame) {
+      console.log('Game DB dan topilmadi');
       return null;
     }
 
     const game = await this.toDomain(IGame);
     if (!game) {
+      console.log('Game ni Domainga ogirishda xato');
       return null;
     }
+    console.log(game.getCurrentPlayerId());
+    console.log(playerId);
     if (game.getCurrentPlayerId() !== playerId) {
+      console.log('Playerni Id si bilan momo');
       return null;
     }
 
@@ -262,6 +267,7 @@ export class GameServiceImpl implements IGameService {
     const domain = new Game(playerX, game.mode, game.board, game.gameId);
 
     domain.setPlayerO(player0);
+    domain.setCurrentPlayer(game.currentPlayer.id, game.currentPlayer.role);
     return domain;
   }
 
