@@ -95,17 +95,9 @@ export class Game {
     this.status = status;
   }
 
-  // static restore(gameId, gameBoard: GameBoard, userId: string, mode: GameMod) {
-  //   const user = new User();
-  // }
-
   setBoard(board: GameBoard) {
     this.board = board;
   }
-
-  // clone(): Game {
-  //   return new Game(this.id, this.board.clone());
-  // }
 }
 
 export enum GameStatus {

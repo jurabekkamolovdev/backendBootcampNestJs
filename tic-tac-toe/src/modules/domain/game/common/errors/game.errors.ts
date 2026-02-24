@@ -53,7 +53,7 @@ export class GameAlreadyStartedError extends AppError {
 }
 
 export class GamePlayerNotFoundError extends AppError {
-  constructor(playerId: string) {
+  constructor(playerId: string | null) {
     super(
       GameErrorCode.GAME_PLAYER_NOT_FOUND,
       `Player with id "${playerId}" was not found`,
