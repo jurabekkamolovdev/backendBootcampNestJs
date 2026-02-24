@@ -134,7 +134,7 @@ export class GameController {
     if (!game) {
       return null;
     }
-
-    return game;
+    const response = this.gameWebMapper.domainToResponse(game);
+    return response.getDataResponse();
   }
 }

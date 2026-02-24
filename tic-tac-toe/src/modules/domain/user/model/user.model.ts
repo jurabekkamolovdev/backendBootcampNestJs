@@ -3,9 +3,9 @@ import { v4 as uuid4 } from 'uuid';
 import { UserPayload } from '../service/user.service.interface';
 
 export class User {
-  private id: string;
-  private login: string;
-  private password: string;
+  private readonly id: string;
+  private readonly login: string;
+  private readonly password: string;
 
   constructor(id: string, login: string, password: string) {
     this.id = id;

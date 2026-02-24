@@ -1,0 +1,12 @@
+export class AppError extends Error {
+  constructor(
+    public readonly code: string,
+    public readonly message: string,
+    public readonly statusCode: number,
+    public readonly details?: unknown,
+  ) {
+    super(message);
+    this.name = this.constructor.name; // 'GameNotFoundError'
+    Error.captureStackTrace(this, this.constructor);
+  }
+}

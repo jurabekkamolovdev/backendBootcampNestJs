@@ -1,3 +1,12 @@
-POST http://localhost:3000/api/game/b2af9a86-9c78-4c77-b863-f64b4c1ecb96/join
+POST http://localhost:3000/api/game/b2af9a86-9c78-4c77-b863-f64b4c1ecb96/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3Mjg3NDEzOC02YjNmLTRlYzEtYjAxZS00MzdkZjY3MGE0YjMiLCJpYXQiOjE3NzE5MzI5ODksImV4cCI6MTc3MjAxOTM4OX0.zijwRQ3CnIKl9hvDMPbgZ_7OotqT0Ll3Hkj4Q3tEHPk
+Content-Type: application/json
 
+{
+  "mode": "USER",
+  "board": [
+    [2, 0, 0],
+    [2, 1, 0],
+    [0, 1, 0]
+  ]
+}

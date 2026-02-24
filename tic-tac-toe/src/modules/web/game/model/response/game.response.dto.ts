@@ -2,7 +2,7 @@ export class GameResponseDto {
   uuid: string;
   board: number[][];
   playerXId: string | null;
-  player0Id: string | null;
+  playerOId: string | null;
   currentPlayerId: string | null;
 
   constructor(
@@ -15,7 +15,7 @@ export class GameResponseDto {
     this.uuid = uuid;
     this.board = board;
     this.playerXId = playerXId;
-    this.player0Id = player0Id;
+    this.playerOId = player0Id;
     this.currentPlayerId = currentPlayerId;
   }
 
@@ -25,7 +25,7 @@ export class GameResponseDto {
       board: this.board,
       players: {
         X: this.playerXId,
-        O: this.player0Id,
+        O: this.playerOId,
       },
       nextMovePlayer: this.currentPlayerId,
     };
