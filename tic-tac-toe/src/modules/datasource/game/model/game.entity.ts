@@ -1,4 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { PlayerRole } from '../../../domain/game/model/game.model';
 
 @Table({
   tableName: 'games',
@@ -30,7 +31,7 @@ export class GameModel extends Model {
     type: DataType.STRING,
     allowNull: true,
   })
-  declare playerId0: string;
+  declare playerIdO: string;
 
   @Column({
     type: DataType.STRING,
@@ -38,10 +39,13 @@ export class GameModel extends Model {
   declare status: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.JSON,
     allowNull: true,
   })
-  declare currentPlayerId: string;
+  declare currentPlayer: {
+    id: string | null;
+    role: PlayerRole;
+  };
 
   @Column({
     type: DataType.STRING,

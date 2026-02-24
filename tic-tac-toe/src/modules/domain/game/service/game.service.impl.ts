@@ -1,15 +1,14 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type { IUserService } from '../../user/service/user.service.interface';
-import { Game, GameStatus, IGame } from '../model/game.model';
+import { Game, GameMod, GameStatus, IGame } from '../model/game.model';
 import { GameBoard } from '../model/game-board.model';
 import type { IGameRepository } from '../../../datasource/game/repository/game.repository.interface';
 import { IGameService } from './game.service.interface';
 
 @Injectable()
 export class GameServiceImpl implements IGameService {
-  private readonly PLAYER = 1; // Player (X)
-  private readonly COMPUTER = 2; // Computer (O)
-  private readonly EMPTY = 0;
+  private COMPUTER = 2; // Computer (O)
+  private EMPTY = 0;
 
   constructor(
     @Inject('IGameRepository')
@@ -36,20 +35,60 @@ export class GameServiceImpl implements IGameService {
   // }
 
   async getGameById(id: string): Promise<Game | null> {
-    const Igame = await this.gameRepository.findById(id);
+    const IGame = await this.gameRepository.findById(id);
 
-    console.log(Igame);
-    if (!Igame) {
+    if (!IGame) {
       return null;
     }
 
-    const game = await this.toDomain(Igame);
+    const game = await this.toDomain(IGame);
 
     if (!game) {
       return null;
     }
 
     return game;
+  }
+
+  async makeMove(
+    gameId: string,
+    newGameBoard: GameBoard,
+    playerId: string,
+  ): Promise<Game | null> {
+    const IGame = await this.gameRepository.findById(gameId);
+    if (!IGame) {
+      return null;
+    }
+
+    const game = await this.toDomain(IGame);
+    if (!game) {
+      return null;
+    }
+    if (game.getCurrentPlayerId() !== playerId) {
+      return null;
+    }
+
+    const isValid = this.validateGameBoard(
+      newGameBoard.getBoard(),
+      game.getBoard().getBoard(),
+      game.getRole(),
+    );
+    if (!isValid) {
+      return null;
+    }
+    game.setBoard(newGameBoard);
+
+    if (this.checkWinner(game.getBoard()) !== null) {
+      game.setGameStatus(GameStatus.WIN);
+    }
+    if (game.getBoard().isFull()) {
+      game.setGameStatus(GameStatus.DRAW);
+    }
+    if (game.getMode() === GameMod.USER) {
+      game.switchPlayer();
+    }
+
+    return await this.gameRepository.save(game);
   }
 
   async createNewGame(game: Game): Promise<Game> {
@@ -62,7 +101,7 @@ export class GameServiceImpl implements IGameService {
     if (!game) {
       return null;
     }
-    game.playerId0 = userId;
+    game.playerIdO = userId;
     const newGame = await this.toDomain(game);
 
     if (!newGame) {
@@ -76,94 +115,90 @@ export class GameServiceImpl implements IGameService {
     return newGame;
   }
 
-  isGameOver(game: Game): boolean {
-    const board = game.getBoard();
+  // isGameOver(game: Game): boolean {
+  //   const board = game.getBoard();
+  //
+  //   return this.checkWinner(board) !== null;
+  // }
 
-    if (this.checkWinner(board) !== null) {
-      return true;
-    }
+  // private getBestMove(board: GameBoard): { row: number; col: number } | null {
+  //   let bestScore = -Infinity;
+  //   let bestMove: { row: number; col: number } | null = null;
+  //   const size = board.getSize();
+  //
+  //   for (let i = 0; i < size; i++) {
+  //     for (let j = 0; j < size; j++) {
+  //       if (board.isEmpty(i, j)) {
+  //         const clonedBoard = board.clone();
+  //         clonedBoard.setCell(i, j, this.COMPUTER);
+  //
+  //         const score = this.minimax(clonedBoard, 0, false);
+  //
+  //         if (score > bestScore) {
+  //           bestScore = score;
+  //           bestMove = { row: i, col: j };
+  //         }
+  //       }
+  //     }
+  //   }
+  //
+  //   return bestMove;
+  // }
 
-    return board.isFull();
-  }
-
-  private getBestMove(board: GameBoard): { row: number; col: number } | null {
-    let bestScore = -Infinity;
-    let bestMove: { row: number; col: number } | null = null;
-    const size = board.getSize();
-
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
-        if (board.isEmpty(i, j)) {
-          const clonedBoard = board.clone();
-          clonedBoard.setCell(i, j, this.COMPUTER);
-
-          const score = this.minimax(clonedBoard, 0, false);
-
-          if (score > bestScore) {
-            bestScore = score;
-            bestMove = { row: i, col: j };
-          }
-        }
-      }
-    }
-
-    return bestMove;
-  }
-
-  private minimax(
-    board: GameBoard,
-    depth: number,
-    isMaximizing: boolean,
-  ): number {
-    const winner = this.checkWinner(board);
-
-    // Terminal states
-    if (winner === this.COMPUTER) {
-      return 10 - depth; // Computer wins (prefer faster wins)
-    }
-    if (winner === this.PLAYER) {
-      return depth - 10; // Player wins (prefer slower losses)
-    }
-    if (board.isFull()) {
-      return 0; // Draw
-    }
-
-    const size = board.getSize();
-
-    if (isMaximizing) {
-      // Computer's turn (maximize)
-      let bestScore = -Infinity;
-
-      for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-          if (board.isEmpty(i, j)) {
-            const clonedBoard = board.clone();
-            clonedBoard.setCell(i, j, this.COMPUTER);
-            const score = this.minimax(clonedBoard, depth + 1, false);
-            bestScore = Math.max(score, bestScore);
-          }
-        }
-      }
-
-      return bestScore;
-    } else {
-      // Player's turn (minimize)
-      let bestScore = Infinity;
-
-      for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-          if (board.isEmpty(i, j)) {
-            const clonedBoard = board.clone();
-            clonedBoard.setCell(i, j, this.PLAYER);
-            const score = this.minimax(clonedBoard, depth + 1, true);
-            bestScore = Math.min(score, bestScore);
-          }
-        }
-      }
-
-      return bestScore;
-    }
-  }
+  // private minimax(
+  //   board: GameBoard,
+  //   depth: number,
+  //   isMaximizing: boolean,
+  // ): number {
+  //   const winner = this.checkWinner(board);
+  //
+  //   // Terminal states
+  //   if (winner === this.COMPUTER) {
+  //     return 10 - depth; // Computer wins (prefer faster wins)
+  //   }
+  //   if (winner === this.PLAYER) {
+  //     return depth - 10; // Player wins (prefer slower losses)
+  //   }
+  //   if (board.isFull()) {
+  //     return 0; // Draw
+  //   }
+  //
+  //   const size = board.getSize();
+  //
+  //   if (isMaximizing) {
+  //     // Computer's turn (maximize)
+  //     let bestScore = -Infinity;
+  //
+  //     for (let i = 0; i < size; i++) {
+  //       for (let j = 0; j < size; j++) {
+  //         if (board.isEmpty(i, j)) {
+  //           const clonedBoard = board.clone();
+  //           clonedBoard.setCell(i, j, this.COMPUTER);
+  //           const score = this.minimax(clonedBoard, depth + 1, false);
+  //           bestScore = Math.max(score, bestScore);
+  //         }
+  //       }
+  //     }
+  //
+  //     return bestScore;
+  //   } else {
+  //     // Player's turn (minimize)
+  //     let bestScore = Infinity;
+  //
+  //     for (let i = 0; i < size; i++) {
+  //       for (let j = 0; j < size; j++) {
+  //         if (board.isEmpty(i, j)) {
+  //           const clonedBoard = board.clone();
+  //           clonedBoard.setCell(i, j, this.PLAYER);
+  //           const score = this.minimax(clonedBoard, depth + 1, true);
+  //           bestScore = Math.min(score, bestScore);
+  //         }
+  //       }
+  //     }
+  //
+  //     return bestScore;
+  //   }
+  // }
 
   private checkWinner(board: GameBoard): number | null {
     const size = board.getSize();
@@ -215,24 +250,26 @@ export class GameServiceImpl implements IGameService {
       return null;
     }
 
-    if (!game.playerId0) {
+    if (!game.playerIdO) {
       console.log(13);
       return null;
     }
-    const player0 = await this.userService.getUserById(game.playerId0);
+    const player0 = await this.userService.getUserById(game.playerIdO);
     if (!player0) {
       console.log(14);
       return null;
     }
     const domain = new Game(playerX, game.mode, game.board, game.gameId);
 
-    domain.setPlayer0(player0);
+    domain.setPlayerO(player0);
     return domain;
   }
 
-  validateGameBoard(newGame: Game, previousGame: Game): boolean {
-    const newBoard = newGame.getBoard().getBoard();
-    const oldBoard = previousGame.getBoard().getBoard();
+  validateGameBoard(
+    newBoard: number[][],
+    oldBoard: number[][],
+    role: 1 | 2,
+  ): boolean {
     const size = 3;
 
     let differenceCount = 0;
@@ -257,6 +294,6 @@ export class GameServiceImpl implements IGameService {
       return false;
     }
 
-    return newBoard[moveRow][moveCol] === this.PLAYER;
+    return newBoard[moveRow][moveCol] === role;
   }
 }

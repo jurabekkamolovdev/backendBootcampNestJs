@@ -17,8 +17,12 @@ export class GameWebMapper {
       game.getId(),
       game.getBoard().getBoard(),
       game.getPlayerX()?.getId() ?? null,
-      game.getPlayer0()?.getId() ?? null,
-      game.getCurrentPlayer() ?? null,
+      game.getPlayerO()?.getId() ?? null,
+      game.getCurrentPlayerId(),
     );
+  }
+
+  requestToGameBoard(dto: GameRequest) {
+    return new GameBoard(dto.board);
   }
 }

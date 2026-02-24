@@ -6,18 +6,36 @@ export class Game {
   private readonly id: string;
   private board: GameBoard;
   private playerX: User | null;
-  private player0: User | null;
+  private playerO: User | null;
   private status: GameStatus;
-  private currentPlayer: User;
+  private currentPlayer: {
+    id: string | null;
+    role: PlayerRole;
+  };
   private winnerUser: User | null;
-  private mode: GameMod;
+  private readonly mode: GameMod;
   constructor(user: User, mode: GameMod, gameBoard?: GameBoard, id?: string) {
     this.playerX = user;
-    this.currentPlayer = this.playerX;
     this.mode = mode;
     this.board = gameBoard || new GameBoard();
     this.status = GameStatus.WAITING;
     this.id = id ? id : uuid4();
+    this.currentPlayer = {
+      id: this.playerX.getId(),
+      role: PlayerRole.X,
+    };
+  }
+
+  getCurrentPlayerId() {
+    return this.currentPlayer.id;
+  }
+
+  getCurrentPlayerRole() {
+    return this.currentPlayer.role;
+  }
+
+  getRole() {
+    return this.currentPlayer.role === PlayerRole.X ? 1 : 2;
   }
 
   getId(): string {
@@ -36,12 +54,22 @@ export class Game {
     return this.playerX;
   }
 
-  getPlayer0() {
-    return this.player0;
+  getPlayerO() {
+    return this.playerO;
   }
 
-  getCurrentPlayer() {
-    return this.currentPlayer.getId();
+  setGameStatus(status: GameStatus) {
+    this.status = status;
+  }
+
+  switchPlayer() {
+    if (this.currentPlayer.id === this.playerX?.getId()) {
+      this.currentPlayer.id = this.playerO?.getId() ?? null;
+      this.currentPlayer.role = PlayerRole.O;
+    } else {
+      this.currentPlayer.id = this.playerX?.getId() ?? null;
+      this.currentPlayer.role = PlayerRole.X;
+    }
   }
 
   getWinnerUser() {
@@ -52,8 +80,8 @@ export class Game {
     return this.mode;
   }
 
-  setPlayer0(user: User) {
-    this.player0 = user;
+  setPlayerO(user: User) {
+    this.playerO = user;
   }
 
   setStatus(status: GameStatus) {
@@ -85,13 +113,21 @@ export enum GameMod {
   COMPUTER = 'COMPUTER',
 }
 
+export enum PlayerRole {
+  X = 'X',
+  O = 'O',
+}
+
 export interface IGame {
   gameId: string;
   board: GameBoard;
-  playerIdX: null | string;
-  playerId0: null | string;
+  playerIdX: string | null;
+  playerIdO: string | null;
   status: GameStatus;
-  currentPlayerId: string;
-  winnerUser: User | null | string;
+  currentPlayer: {
+    id: string | null;
+    role: PlayerRole;
+  };
+  winnerUser: User | string | null;
   mode: GameMod;
 }

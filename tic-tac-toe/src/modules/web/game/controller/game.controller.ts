@@ -105,7 +105,6 @@ export class GameController {
     @Request() req: { user: { id: string } },
     @Param('gameId') gameId: string,
   ): Promise<GameResponseDto | null> {
-
     const game = await this.gameService.joinGame(req.user.id, gameId);
 
     if (!game) {
@@ -124,17 +123,18 @@ export class GameController {
     @Param('gameId') gameId: string,
     @Body() gameDto: GameRequest,
   ) {
-    console.log(gameId);
-    const game = await this.gameService.getGameById(gameId);
-    console.log(gameDto);
+    const newGameBoard = this.gameWebMapper.requestToGameBoard(gameDto);
+
+    const game = await this.gameService.makeMove(
+      gameId,
+      newGameBoard,
+      req.user.id,
+    );
+
     if (!game) {
       return null;
     }
 
-    if (game.getCurrentPlayer() !== req.user.id) {
-      return null;
-    }
-
-    return 'Hello';
+    return game;
   }
 }

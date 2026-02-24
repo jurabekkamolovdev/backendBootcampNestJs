@@ -20,9 +20,12 @@ export class GameDataMapper {
         size: domainGame.getBoard().getSize(),
       },
       playerIdX: domainGame.getPlayerX()?.getId() ?? null,
-      playerId0: domainGame.getPlayer0()?.getId() ?? null,
+      playerIdO: domainGame.getPlayerO()?.getId() ?? null,
       status: domainGame.getStatus(),
-      currentPlayerId: domainGame.getCurrentPlayer(),
+      currentPlayer: {
+        id: domainGame.getCurrentPlayerId(),
+        role: domainGame.getCurrentPlayerRole(),
+      },
       winnerUserId: domainGame.getWinnerUser()?.getId() ?? null,
       mode: domainGame.getMode(),
     });
@@ -34,9 +37,12 @@ export class GameDataMapper {
       gameId: entity.uuid,
       board: gameBoard,
       playerIdX: entity.playerIdX,
-      playerId0: entity.playerId0,
+      playerIdO: entity.playerIdO,
       status: entity.status as GameStatus,
-      currentPlayerId: entity.currentPlayerId,
+      currentPlayer: {
+        id: entity.currentPlayer.id,
+        role: entity.currentPlayer.role,
+      },
       winnerUser: entity.winnerUserId,
       mode: entity.mode as GameMod,
     };
