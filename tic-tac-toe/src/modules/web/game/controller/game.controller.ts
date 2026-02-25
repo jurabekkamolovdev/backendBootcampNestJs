@@ -2,23 +2,15 @@ import {
   Body,
   Controller,
   Inject,
-  // Param,
   Post,
-  // HttpStatus,
   UseGuards,
-  // HttpException,
   Request,
   Param,
+  Get,
 } from '@nestjs/common';
 import { GameWebMapper } from '../mapper/game-web.mapper';
 import type { IGameService } from '../../../domain/game/service/game.service.interface';
-import {
-  // GameMoveRequest,
-  GameRequest,
-} from '../model/request/game-move.request.dto';
-// import { GameResponseDto } from '../model/response/game.response.dto';
-// import { Game } from '../../../domain/game/model/game.model';
-// import { GameBoard } from '../../../domain/game/model/game-board.model';
+import { GameRequest } from '../model/request/game-move.request.dto';
 import { JwtAuthGuard } from '../../../domain/user/guard/jwt-auth.guard';
 import type { IUserService } from '../../../domain/user/service/user.service.interface';
 import { GameResponseDto } from '../model/response/game.response.dto';
@@ -84,5 +76,13 @@ export class GameController {
     }
     const response = this.gameWebMapper.domainToResponse(game);
     return response.getDataResponse();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async findAll() {
+    const games = await this.gameService.findAll();
+
+    return this.gameWebMapper.iGameToListItemResponse(games);
   }
 }

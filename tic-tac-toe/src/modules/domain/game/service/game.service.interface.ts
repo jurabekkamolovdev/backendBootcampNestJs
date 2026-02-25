@@ -1,4 +1,4 @@
-import { Game } from '../model/game.model';
+import { Game, IGame } from '../model/game.model';
 import { GameBoard } from '../model/game-board.model';
 
 export interface IGameService {
@@ -19,4 +19,6 @@ export interface IGameService {
     newGameBoard: GameBoard,
     playerId: string,
   ): Promise<Game | null>;
+
+  findAll(): Promise<IGame[]>;
 }

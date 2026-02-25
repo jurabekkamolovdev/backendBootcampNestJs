@@ -31,3 +31,22 @@ export class GameResponseDto {
     };
   }
 }
+
+export class GameListItemResponseDto {
+  gameId: string;
+  playerXId: string | null;
+  status: string;
+  mode: string;
+
+  constructor(
+    gameId: string,
+    playerXId: string | null,
+    status: string,
+    mode: string,
+  ) {
+    this.gameId = gameId;
+    this.playerXId = playerXId;
+    this.status = status;
+    this.mode = mode;
+  }
+}

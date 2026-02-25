@@ -5,5 +5,5 @@ export interface IGameRepository {
 
   findById(id: string): Promise<IGame | null>;
 
-  // delete(id: string): Promise<boolean>;
+  findAll(): Promise<IGame[]>;
 }

@@ -43,7 +43,7 @@ export class GameDataMapper {
         id: entity.currentPlayer.id,
         role: entity.currentPlayer.role,
       },
-      winnerUser: entity.winnerUserId,
+      winnerUserId: entity.winnerUserId ?? null,
       mode: entity.mode as GameMod,
     };
   }

@@ -127,6 +127,6 @@ export interface IGame {
     id: string | null;
     role: PlayerRole;
   };
-  winnerUser: User | string | null;
+  winnerUserId: string | null;
   mode: GameMod;
 }

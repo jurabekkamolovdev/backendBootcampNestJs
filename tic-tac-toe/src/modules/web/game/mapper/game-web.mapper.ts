@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { GameRequest } from '../model/request/game-move.request.dto';
-import { GameResponseDto } from '../model/response/game.response.dto';
+import {
+  GameResponseDto,
+  GameListItemResponseDto,
+} from '../model/response/game.response.dto';
 import { GameBoard } from '../../../domain/game/model/game-board.model';
-import { Game } from '../../../domain/game/model/game.model';
+import { Game, IGame } from '../../../domain/game/model/game.model';
 import { User } from '../../../domain/user/model/user.model';
 
 @Injectable()
@@ -24,5 +27,17 @@ export class GameWebMapper {
 
   requestToGameBoard(dto: GameRequest) {
     return new GameBoard(dto.board);
+  }
+
+  iGameToListItemResponse(games: IGame[]): GameListItemResponseDto[] {
+    return games.map(
+      (game) =>
+        new GameListItemResponseDto(
+          game.gameId,
+          game.playerIdX,
+          game.status,
+          game.mode,
+        ),
+    );
   }
 }

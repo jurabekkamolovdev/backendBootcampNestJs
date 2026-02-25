@@ -217,6 +217,8 @@ export class GameServiceImpl implements IGameService {
       domain.setPlayerO(playerO);
     }
 
+    domain.setStatus(iGame.status);
+
     return domain;
   }
   validateGameBoard(
@@ -278,5 +280,9 @@ export class GameServiceImpl implements IGameService {
     }
 
     return null;
+  }
+
+  async findAll(): Promise<IGame[]> {
+    return await this.gameRepository.findAll();
   }
 }

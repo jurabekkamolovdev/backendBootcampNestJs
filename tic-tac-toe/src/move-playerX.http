@@ -1,12 +1,12 @@
-POST http://localhost:3000/api/game/61d657f7-4fd0-4478-b385-858d2cb8c970/
+POST http://localhost:3000/api/game/84da5501-b01b-409e-806f-861fc986471a/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1M2Q5YzgyZC0zNDQyLTQ2OGUtODI5Ni1jYTBkNmUzZTM1ZGMiLCJpYXQiOjE3NzE5MzI3NDgsImV4cCI6MTc3MjAxOTE0OH0.gLVkGIHDxPus8m7Xcw1mxMLm1OZMAwAX9z_ZGWnOMN8
 Content-Type: application/json
 
 {
-  "mode": "COMPUTER",
+  "mode": "USER",
   "board": [
-    [2, 1, 0],
-    [0, 1, 0],
-    [0, 2, 0]
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
   ]
 }
