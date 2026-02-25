@@ -22,6 +22,8 @@ export class GameWebMapper {
       game.getPlayerX()?.getId() ?? null,
       game.getPlayerO()?.getId() ?? null,
       game.getCurrentPlayerId(),
+      game.getStatus() ?? null,
+      game.getWinnerUserId() ?? null,
     );
   }
 

@@ -13,7 +13,10 @@ import type { IGameService } from '../../../domain/game/service/game.service.int
 import { GameRequest } from '../model/request/game-move.request.dto';
 import { JwtAuthGuard } from '../../../domain/user/guard/jwt-auth.guard';
 import type { IUserService } from '../../../domain/user/service/user.service.interface';
-import { GameListItemResponseDto, GameResponseDto } from '../model/response/game.response.dto';
+import {
+  GameListItemResponseDto,
+  GameResponseDto,
+} from '../model/response/game.response.dto';
 
 @Controller('game')
 export class GameController {

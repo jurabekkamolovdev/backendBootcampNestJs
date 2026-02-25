@@ -9,10 +9,10 @@ export class Game {
   private playerO: User | null;
   private status: GameStatus;
   private currentPlayer: {
-    id: string | null;
+    id: string;
     role: PlayerRole;
   };
-  private winnerUser: User | null;
+  private winnerUser: string | null;
   private readonly mode: GameMod;
   constructor(user: User, mode: GameMod, gameBoard?: GameBoard, id?: string) {
     this.playerX = user;
@@ -26,7 +26,7 @@ export class Game {
     };
   }
 
-  setCurrentPlayer(id: string | null, role: PlayerRole): void {
+  setCurrentPlayer(id: string, role: PlayerRole): void {
     this.currentPlayer = {
       id: id,
       role: role,
@@ -69,17 +69,21 @@ export class Game {
     this.status = status;
   }
 
+  setWinnerPlayerId(playerId: string) {
+    this.winnerUser = playerId;
+  }
+
   switchPlayer() {
     if (this.currentPlayer.id === this.playerX?.getId()) {
-      this.currentPlayer.id = this.playerO?.getId() ?? null;
+      this.currentPlayer.id = this.playerO?.getId() as string;
       this.currentPlayer.role = PlayerRole.O;
     } else {
-      this.currentPlayer.id = this.playerX?.getId() ?? null;
+      this.currentPlayer.id = this.playerX?.getId() as string;
       this.currentPlayer.role = PlayerRole.X;
     }
   }
 
-  getWinnerUser() {
+  getWinnerUserId() {
     return this.winnerUser;
   }
 
@@ -124,7 +128,7 @@ export interface IGame {
   playerIdO: string | null;
   status: GameStatus;
   currentPlayer: {
-    id: string | null;
+    id: string;
     role: PlayerRole;
   };
   winnerUserId: string | null;

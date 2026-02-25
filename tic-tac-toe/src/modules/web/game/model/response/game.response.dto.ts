@@ -4,6 +4,8 @@ export class GameResponseDto {
   playerXId: string | null;
   playerOId: string | null;
   currentPlayerId: string | null;
+  gameStatus: string | null;
+  winnerId: string | null;
 
   constructor(
     uuid: string,
@@ -11,12 +13,16 @@ export class GameResponseDto {
     playerXId: string | null,
     player0Id: string | null,
     currentPlayerId: string | null,
+    gameStatus: string | null,
+    winnerId: string | null,
   ) {
     this.uuid = uuid;
     this.board = board;
     this.playerXId = playerXId;
     this.playerOId = player0Id;
     this.currentPlayerId = currentPlayerId;
+    this.gameStatus = gameStatus;
+    this.winnerId = winnerId;
   }
 
   getDataResponse() {
@@ -28,6 +34,8 @@ export class GameResponseDto {
         O: this.playerOId,
       },
       nextMovePlayer: this.currentPlayerId,
+      gameStatus: this.gameStatus,
+      winnerId: this.winnerId,
     };
   }
 }

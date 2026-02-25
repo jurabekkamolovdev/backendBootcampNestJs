@@ -26,7 +26,7 @@ export class GameDataMapper {
         id: domainGame.getCurrentPlayerId(),
         role: domainGame.getCurrentPlayerRole(),
       },
-      winnerUserId: domainGame.getWinnerUser()?.getId() ?? null,
+      winnerUserId: domainGame.getWinnerUserId() ?? null,
       mode: domainGame.getMode(),
     });
   }
@@ -40,7 +40,7 @@ export class GameDataMapper {
       playerIdO: entity.playerIdO,
       status: entity.status as GameStatus,
       currentPlayer: {
-        id: entity.currentPlayer.id,
+        id: entity.currentPlayer.id as string,
         role: entity.currentPlayer.role,
       },
       winnerUserId: entity.winnerUserId ?? null,

@@ -61,6 +61,7 @@ export class GameServiceImpl implements IGameService {
     game.setBoard(newGameBoard);
 
     if (this.checkWinner(game.getBoard()) !== null) {
+      game.setWinnerPlayerId(playerId);
       game.setGameStatus(GameStatus.WIN);
       return this.gameRepository.save(game);
     }
@@ -70,6 +71,10 @@ export class GameServiceImpl implements IGameService {
       return this.gameRepository.save(game);
     }
 
+    if (game.getMode() === GameMod.USER) {
+      game.switchPlayer();
+    }
+
     if (game.getMode() === GameMod.COMPUTER) {
       const bestMove = this.getBestMove(game.getBoard());
       if (bestMove) {
@@ -77,6 +82,9 @@ export class GameServiceImpl implements IGameService {
       }
 
       if (this.checkWinner(game.getBoard()) !== null) {
+        if (game.getMode() === GameMod.USER) {
+          game.setWinnerPlayerId(game.getCurrentPlayerId());
+        }
         game.setGameStatus(GameStatus.WIN);
         return this.gameRepository.save(game);
       }
@@ -85,10 +93,6 @@ export class GameServiceImpl implements IGameService {
         game.setGameStatus(GameStatus.DRAW);
         return this.gameRepository.save(game);
       }
-    }
-
-    if (game.getMode() === GameMod.USER) {
-      game.switchPlayer();
     }
 
     return this.gameRepository.save(game);
