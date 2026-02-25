@@ -8,7 +8,7 @@ export interface IGameService {
     role: 1 | 2,
   ): boolean;
 
-  getGameById(id: string): Promise<Game | null>;
+  getGameById(id: string): Promise<IGame | null>;
 
   createNewGame(game: Game): Promise<Game>;
 

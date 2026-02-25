@@ -13,7 +13,7 @@ import type { IGameService } from '../../../domain/game/service/game.service.int
 import { GameRequest } from '../model/request/game-move.request.dto';
 import { JwtAuthGuard } from '../../../domain/user/guard/jwt-auth.guard';
 import type { IUserService } from '../../../domain/user/service/user.service.interface';
-import { GameResponseDto } from '../model/response/game.response.dto';
+import { GameListItemResponseDto, GameResponseDto } from '../model/response/game.response.dto';
 
 @Controller('game')
 export class GameController {
@@ -84,5 +84,20 @@ export class GameController {
     const games = await this.gameService.findAll();
 
     return this.gameWebMapper.iGameToListItemResponse(games);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':gameId')
+  async getGameById(@Param('gameId') gameId: string) {
+    const game = await this.gameService.getGameById(gameId);
+    if (!game) {
+      return null;
+    }
+    return new GameListItemResponseDto(
+      game.gameId,
+      game?.playerIdX,
+      game.status,
+      game.mode,
+    );
   }
 }

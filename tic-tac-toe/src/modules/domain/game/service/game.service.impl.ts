@@ -27,14 +27,14 @@ export class GameServiceImpl implements IGameService {
     private readonly userService: IUserService,
   ) {}
 
-  async getGameById(id: string): Promise<Game> {
+  async getGameById(id: string): Promise<IGame | null> {
     const iGame = await this.gameRepository.findById(id);
 
     if (!iGame) {
       throw new GameNotFoundError(id);
     }
 
-    return this.toDomain(iGame, id);
+    return iGame;
   }
 
   async makeMove(
