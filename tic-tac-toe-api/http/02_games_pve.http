@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:3000
+
+### Create PvE game (vs computer)
+POST {{baseUrl}}/games
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMmQ2Y2Q0MS1iYjNjLTQ0MDctYjZiNC1lOGFiYzhmODhlYjQiLCJpYXQiOjE3NzUxNDM5NzYsImV4cCI6MTc3NTE0NDg3Nn0.G7IAneEvVcHB_scrniJhxPtDoZt1yU7B3kS2EOSNyug
+Content-Type: application/json
+
+{
+  "opponent": "computer"
+}
+
+### Get game
+GET {{baseUrl}}/games/{{gameUuidPve}}
+Authorization: Bearer {{accessTokenUser1}}
+
+### Make a move (row/col are 0..2)
+POST {{baseUrl}}/games/{{gameUuidPve}}/move
+Authorization: Bearer {{accessTokenUser1}}
+Content-Type: application/json
+
+{
+  "row": 0,
+  "col": 0
+}
+
+### Make another move
+POST {{baseUrl}}/games/{{gameUuidPve}}/move
+Authorization: Bearer {{accessTokenUser1}}
+Content-Type: application/json
+
+{
+  "row": 1,
+  "col": 1
+}
+
+### Legacy endpoint alias (same as /games/:uuid/move)
+POST {{baseUrl}}/game/{{gameUuidPve}}/move
+Authorization: Bearer {{accessTokenUser1}}
+Content-Type: application/json
+
+{
+  "row": 2,
+  "col": 2
+}
+

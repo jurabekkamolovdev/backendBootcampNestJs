@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:3000
+
+### User1 creates PvP game (waiting_for_players)
+POST {{baseUrl}}/games
+Authorization: Bearer {{accessTokenUser1}}
+Content-Type: application/json
+
+{
+  "opponent": "user"
+}
+
+> {%
+  client.global.set("gameUuidPvp", response.body.uuid);
+%}
+
+### List available games (should include gameUuidPvp)
+GET {{baseUrl}}/games
+Authorization: Bearer {{accessTokenUser2}}
+
+### User2 joins
+POST {{baseUrl}}/games/{{gameUuidPvp}}/join
+Authorization: Bearer {{accessTokenUser2}}
+
+### User1 move (X)
+POST {{baseUrl}}/games/{{gameUuidPvp}}/move
+Authorization: Bearer {{accessTokenUser1}}
+Content-Type: application/json
+
+{
+  "row": 0,
+  "col": 0
+}
+
+### User2 move (O)
+POST {{baseUrl}}/games/{{gameUuidPvp}}/move
+Authorization: Bearer {{accessTokenUser2}}
+Content-Type: application/json
+
+{
+  "row": 0,
+  "col": 1
+}
+
+### Get current game
+GET {{baseUrl}}/games/{{gameUuidPvp}}
+Authorization: Bearer {{accessTokenUser1}}
+

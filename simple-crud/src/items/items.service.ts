@@ -24,7 +24,7 @@ export class ItemsService {
   }
 
   create(itemData: Omit<Item, 'id'>): Item {
-    const id = Date.now().toString(); // simple ID generation
+    const id = Date.now().toString();
     const newItem: Item = { id, ...itemData };
     this.items.set(id, newItem);
     return newItem;

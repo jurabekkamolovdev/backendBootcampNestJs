@@ -1,0 +1,9 @@
+@baseUrl = http://localhost:3000
+
+### Get own user info (paste uuid from JWT sub if needed)
+# Tip: after /signin, token payload contains "sub" = userUuid.
+@userUuid = REPLACE_WITH_UUID
+
+GET {{baseUrl}}/users/{{userUuid}}
+Authorization: Bearer {{accessTokenUser1}}
+
