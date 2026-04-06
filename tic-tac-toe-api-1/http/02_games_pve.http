@@ -1,8 +1,10 @@
 @baseUrl = http://localhost:3000
+@accessTokenUser1 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMmQ2Y2Q0MS1iYjNjLTQ0MDctYjZiNC1lOGFiYzhmODhlYjQiLCJpYXQiOjE3NzUyMTY0NDcsImV4cCI6MTc3NTIxNzM0N30.PQ-ft-6ObkJ3O4uihrpoBmX2T2tYrscKBwU5D02a4Co
+@gameUuidPve = 8fd206f5-29f3-458e-afd6-ccdc2d3f9c93
 
 ### Create PvE game (vs computer)
 POST {{baseUrl}}/games
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMmQ2Y2Q0MS1iYjNjLTQ0MDctYjZiNC1lOGFiYzhmODhlYjQiLCJpYXQiOjE3NzUxNDM5NzYsImV4cCI6MTc3NTE0NDg3Nn0.G7IAneEvVcHB_scrniJhxPtDoZt1yU7B3kS2EOSNyug
+Authorization: Bearer {{accessTokenUser1}}
 Content-Type: application/json
 
 {
@@ -19,7 +21,7 @@ Authorization: Bearer {{accessTokenUser1}}
 Content-Type: application/json
 
 {
-  "row": 0,
+  "row": 1,
   "col": 0
 }
 

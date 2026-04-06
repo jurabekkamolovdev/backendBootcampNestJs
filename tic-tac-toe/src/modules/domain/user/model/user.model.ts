@@ -24,8 +24,8 @@ export class User {
     return this.password;
   }
 
-  async verifyPassword(password: string) {
-    return await bcrypt.compare(password, this.password);
+  async verifyPassword(password: string): Promise<boolean> {
+    return await bcrypt.compare(this.password, password);
   }
 
   static async create(data: UserPayload): Promise<User> {

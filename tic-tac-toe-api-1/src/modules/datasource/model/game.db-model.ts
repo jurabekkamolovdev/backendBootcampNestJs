@@ -27,23 +27,23 @@ export class GameDbModel extends Model<
 > {
   @PrimaryKey
   @Column({ type: DataType.UUID })
-  uuid!: string;
+  declare uuid: string;
 
   @Column({ type: DataType.JSONB })
-  board!: GameBoardEntity;
+  declare board: GameBoardEntity;
 
   @Column({ type: DataType.UUID })
-  playerXUuid!: string;
+  declare playerXUuid: string;
 
   @Column({ type: DataType.UUID, allowNull: true })
-  playerOUuid?: string;
+  declare playerOUuid?: string;
 
   @Column({ type: DataType.BOOLEAN })
   vsComputer!: boolean;
 
   @Column({ type: DataType.STRING })
-  stateKind!: 'waiting_for_players' | 'turn' | 'draw' | 'win';
+  declare stateKind: 'waiting_for_players' | 'turn' | 'draw' | 'win';
 
   @Column({ type: DataType.UUID, allowNull: true })
-  stateUserUuid?: string;
+  declare stateUserUuid?: string;
 }

@@ -1,9 +1,0 @@
-@baseUrl = http://localhost:3000
-
-### Smoke: Unauthorized should be 401
-GET {{baseUrl}}/games
-
-### Smoke: Authorized GET /games (should return array)
-GET {{baseUrl}}/games
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMmQ2Y2Q0MS1iYjNjLTQ0MDctYjZiNC1lOGFiYzhmODhlYjQiLCJpYXQiOjE3NzUxNDU3ODUsImV4cCI6MTc3NTE0NjY4NX0.xZkWujkZcjUyGh-zoz4FhRcTn_s8s415kukeHXV9A0Y
-

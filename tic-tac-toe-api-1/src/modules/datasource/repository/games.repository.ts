@@ -28,7 +28,6 @@ export class GamesRepositoryImpl implements GamesRepository {
   async get(uuid: string): Promise<Game | undefined> {
     const dbModel = await this.games.findByPk(uuid);
     if (!dbModel) return undefined;
-
     const entity: GameEntity = {
       uuid: dbModel.uuid,
       board: dbModel.board,

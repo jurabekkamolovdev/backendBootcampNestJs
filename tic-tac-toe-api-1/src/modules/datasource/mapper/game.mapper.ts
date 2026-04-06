@@ -17,6 +17,7 @@ export function toEntity(domain: Game): GameEntity {
 }
 
 export function toDomain(entity: GameEntity): Game {
+  console.log('22222', entity);
   const state =
     entity.stateKind === 'waiting_for_players'
       ? ({ kind: 'waiting_for_players' } as const)

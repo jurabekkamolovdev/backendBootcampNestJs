@@ -19,6 +19,7 @@ import {
   getWinnerCell,
 } from './game-rules';
 import type { GameService } from './game.service.interface';
+import { console } from 'node:inspector';
 
 @Injectable()
 export class GameServiceImpl implements GameService {
@@ -99,7 +100,7 @@ export class GameServiceImpl implements GameService {
 
     const symbol = resolveSymbol(game, userUuid);
     const nextBoard = applyMove(game.board, row, col, symbol);
-
+    console.log('99999', game);
     // PvE: after X plays, computer (O) plays automatically.
     const boardAfterOpponent =
       game.vsComputer && symbol === 1
