@@ -1,0 +1,13 @@
+@gameUuid = 780203ef-2c86-4b2d-ad53-55f76450a909
+@playerUuid = 1212
+
+POST http://localhost:3000/game/{{gameUuid}}/{{playerUuid}}/move/
+Content-Type: application/json
+
+{
+  "newBoard": [
+    [1, 2, 1],
+    [1, 2, 2],
+    [2, 1, 1]
+  ]
+}

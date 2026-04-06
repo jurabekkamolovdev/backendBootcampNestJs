@@ -1,0 +1,12 @@
+POST http://localhost:3000/game/
+Content-Type: application/json
+
+{
+  "playerUuid": "1212",
+  "opponent": "computer",
+  "board": [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+  ]
+}
