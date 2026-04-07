@@ -1,4 +1,12 @@
-import { Body, Controller, Inject, Post, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Post,
+  Param,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import {
   type IGameService,
   GAME_SERVICE,
@@ -9,6 +17,8 @@ import {
   type CreateGameResult,
   type MakeMoveResult,
 } from 'src/modules/domain/game/model/game-result';
+import { JwtAuthGuard } from 'src/modules/infrastructure/jwt/jwt-auth.guard';
+import { JwtPayload } from 'src/modules/infrastructure/jwt/jwt.strategy';
 
 @Controller('game')
 export class GameController {
@@ -17,11 +27,14 @@ export class GameController {
     private readonly gameService: IGameService,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async createNewGame(
+  createNewGame(
+    @Request() req: { user: JwtPayload },
     @Body() dto: CreateGameRequestDto,
-  ): Promise<CreateGameResult> {
-    const resultDomain: CreateGameResult = await this.gameService.createGame(
+  ): CreateGameResult {
+    console.log(req.user);
+    const resultDomain: CreateGameResult = this.gameService.createGame(
       dto.playerUuid,
       dto.opponent,
       dto.board,

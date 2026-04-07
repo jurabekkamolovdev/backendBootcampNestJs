@@ -1,4 +1,3 @@
-// src/infrastructure/database/game/repository/game.repository.impl.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { GameEntity } from '../model/game.entity';

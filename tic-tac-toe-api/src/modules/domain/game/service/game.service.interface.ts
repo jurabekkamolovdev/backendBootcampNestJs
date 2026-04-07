@@ -6,7 +6,7 @@ export interface IGameService {
     playerUuid: string,
     opponent: Opponent,
     board: number[][],
-  ): Promise<CreateGameResult>;
+  ): CreateGameResult;
 
   makeMove(
     gameUuid: string,

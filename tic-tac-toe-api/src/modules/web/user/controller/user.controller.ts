@@ -4,7 +4,6 @@ import {
   USER_SERVICE,
 } from 'src/modules/domain/user/service/user.service.interface';
 import { CreateUserRequestDto } from '../model/request/user-create.request';
-import { CreateUserResult } from 'src/modules/domain/user/model/user-result';
 
 @Controller('user')
 export class UserController {
@@ -15,12 +14,9 @@ export class UserController {
 
   @Post('signup')
   async signUp(@Body() dto: CreateUserRequestDto) {
-    const resultDomain: CreateUserResult = await this.userService.createUser(
-      dto.login,
-      dto.password,
-    );
+    await this.userService.createUser(dto.login, dto.password);
 
-    return resultDomain;
+    return true;
   }
 
   @Post('signin')
@@ -29,10 +25,11 @@ export class UserController {
       throw new Error('Basic auth header required');
     }
 
-    const access_token: string = await this.userService.signInUser(authHeader);
-    console.log('1111111', access_token);
+    const { access_token, uuid }: { access_token: string; uuid: string } =
+      await this.userService.signInUser(authHeader);
     return {
       access_token: access_token,
+      uuid: uuid,
     };
   }
 }

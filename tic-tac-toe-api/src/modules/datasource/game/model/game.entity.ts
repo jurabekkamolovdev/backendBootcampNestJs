@@ -1,4 +1,3 @@
-// src/infrastructure/database/game/model/game.entity.ts
 import {
   Column,
   DataType,

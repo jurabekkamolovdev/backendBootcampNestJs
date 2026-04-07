@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { DatasourceModule } from 'src/modules/datasource/game/datasource.module';
+import { UserDomainModule } from '../user/user-domain.module';
 import { GAME_SERVICE } from './service/game.service.interface';
 import { GameServiceImpl } from './service/game.service.impl';
 
 @Module({
-  imports: [DatasourceModule],
+  imports: [DatasourceModule, UserDomainModule],
   providers: [
     {
       provide: GAME_SERVICE,

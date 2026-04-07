@@ -6,20 +6,37 @@ import {
   type IGameRepository,
   GAMES_REPOSITORY,
 } from 'src/modules/datasource/game/repository/game.repository.interface';
+import {
+  type IUserService,
+  USER_SERVICE,
+} from '../../user/service/user.service.interface';
 import { CreateGameResult, MakeMoveResult } from '../model/game-result';
+import {
+  type IGameRepositoryMap,
+  GAMES_REPOSITORY_MAP,
+} from 'src/modules/datasource/game/repository/Map/game-map.repository.interface';
 
 @Injectable()
 export class GameServiceImpl implements IGameService {
   constructor(
     @Inject(GAMES_REPOSITORY)
     private readonly gameRepository: IGameRepository,
+    @Inject(USER_SERVICE)
+    private readonly userService: IUserService,
+    @Inject(GAMES_REPOSITORY_MAP)
+    private readonly gameRepositoryMap: IGameRepositoryMap,
   ) {}
 
-  async createGame(
+  createGame(
     playerUuid: string,
     opponent: Opponent,
     board: number[][],
-  ): Promise<CreateGameResult> {
+  ): CreateGameResult {
+    const isInGame = this.gameRepositoryMap.isPlayerInGame(playerUuid);
+
+    if (isInGame) {
+      throw new Error(`Siz allaqchon o'yindasiz!!!`);
+    }
     const gameBoard = new GameBoard(board, 0);
     const game = new Game(gameBoard, opponent);
 
@@ -31,17 +48,11 @@ export class GameServiceImpl implements IGameService {
     if (player.state === 1) {
       game.setPlayerX(player);
       if (opponent === 'computer') {
-        game.setPlayerO({
-          uuid: 'computer',
-          state: 2,
-        });
+        game.setPlayerO({ uuid: 'computer', state: 2 });
       }
     } else {
       game.setPlayerO(player);
-      game.setPlayerX({
-        uuid: 'computer',
-        state: 1,
-      });
+      game.setPlayerX({ uuid: 'computer', state: 1 });
     }
 
     game.startGame();
@@ -52,7 +63,7 @@ export class GameServiceImpl implements IGameService {
       game.takeTurn(row, col, 1);
     }
 
-    await this.gameRepository.save(game);
+    this.gameRepositoryMap.save(game, playerUuid);
 
     return {
       gameUuid: game.getGameUuid(),
@@ -69,7 +80,7 @@ export class GameServiceImpl implements IGameService {
   ): Promise<MakeMoveResult> {
     const newGameBoard: GameBoard = new GameBoard(newBoard);
 
-    const game: Game | null = await this.gameRepository.findById(gameUuid);
+    const game: Game | null = this.gameRepositoryMap.findById(gameUuid);
 
     if (!game) {
       throw new Error(`Bunday o'yin mavjud emas: ${gameUuid}`);
@@ -84,7 +95,8 @@ export class GameServiceImpl implements IGameService {
     game.setNewCell(move);
 
     if (game.checkGameOver()) {
-      await this.gameRepository.update(game);
+      await this.gameRepository.save(game);
+      this.gameRepositoryMap.delete(game);
       return {
         gameUuid: game.getGameUuid(),
         playerState: move.newCell as 1 | 2,
@@ -101,7 +113,7 @@ export class GameServiceImpl implements IGameService {
       }
     }
 
-    await this.gameRepository.update(game);
+    this.gameRepositoryMap.update(game);
 
     return {
       gameUuid: game.getGameUuid(),

@@ -1,8 +1,12 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU1Nzk5MzYsImV4cCI6MTc3NTU4MDgzNn0.yTR3kF23pFftu40QCYTmYBz2Zv-ijtdg6TW3VgMpO9w
+@playerUuid = 5fe98269-6e99-450a-9f99-e27c2179906b
+
 POST http://localhost:3000/game/
+Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "playerUuid": "1212",
+  "playerUuid": "{{playerUuid}}",
   "opponent": "computer",
   "board": [
     [0, 0, 0],
