@@ -6,7 +6,7 @@ export class User {
   private login: string;
   private passwordHash: string;
 
-  constructor(login: string, passwordHash: string, uuid: string) {
+  constructor(uuid: string, login: string, passwordHash: string) {
     this.uuid = uuid;
     this.login = login;
     this.passwordHash = passwordHash;
@@ -28,10 +28,10 @@ export class User {
     const passwordHash = await bcrypt.hash(password, 10);
     const uuid = randomUUID();
 
-    return new User(login, passwordHash, uuid);
+    return new User(uuid, login, passwordHash);
   }
 
-  async verifyPassword(password: string) {
+  async verifyPassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.passwordHash);
   }
 }

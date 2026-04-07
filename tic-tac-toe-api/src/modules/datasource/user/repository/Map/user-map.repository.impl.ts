@@ -21,9 +21,18 @@ export class UserRepositoryMapImpl implements IUserRepositoryMap {
     }
 
     this._db.set(entity.id, entity);
-    console.log(entity);
-    console.log(this._db);
     return true;
+  }
+
+  findByLogin(userLogin: string): User | null {
+    for (const entity of this._db.values()) {
+      if (entity.login === userLogin) {
+        console.log(entity);
+        return this.userDataMapper.toDomain(entity);
+      }
+    }
+
+    return null;
   }
 
   update(domainUser: User): boolean {

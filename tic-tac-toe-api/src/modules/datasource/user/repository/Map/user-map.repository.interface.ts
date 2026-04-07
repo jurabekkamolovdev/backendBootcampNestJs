@@ -6,6 +6,8 @@ export interface IUserRepositoryMap {
   update(domainUser: User): boolean;
 
   findById(userUuid: string): User | null;
+
+  findByLogin(userLogin: string): User | null;
 }
 
 export const USER_REPOSITORY_MAP = Symbol('USER_REPOSITORY_MAP');

@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post, Headers } from '@nestjs/common';
 import {
   type IUserService,
   USER_SERVICE,
@@ -13,13 +13,26 @@ export class UserController {
     private readonly userService: IUserService,
   ) {}
 
-  @Post()
-  async createUser(@Body() dto: CreateUserRequestDto) {
+  @Post('signup')
+  async signUp(@Body() dto: CreateUserRequestDto) {
     const resultDomain: CreateUserResult = await this.userService.createUser(
       dto.login,
       dto.password,
     );
 
     return resultDomain;
+  }
+
+  @Post('signin')
+  async signIn(@Headers('authorization') authHeader: string) {
+    if (!authHeader || !authHeader.startsWith('Basic ')) {
+      throw new Error('Basic auth header required');
+    }
+
+    const access_token: string = await this.userService.signInUser(authHeader);
+    console.log('1111111', access_token);
+    return {
+      access_token: access_token,
+    };
   }
 }
