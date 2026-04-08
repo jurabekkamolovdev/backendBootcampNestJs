@@ -2,5 +2,14 @@
 @gameUuid = 17c66769-328d-4976-ba4c-37f676442f71
 
 
-POST http://localhost:3000/game/{{gameUuid}}/join/
+POST http://localhost:3000/game/{{gameUuid}}/move/
 Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "newBoard": [
+    [1, 2, 0],
+    [1, 2, 0],
+    [1, 2, 0]
+  ]
+}

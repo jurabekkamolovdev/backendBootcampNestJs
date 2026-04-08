@@ -10,18 +10,20 @@ export class Game {
   private playerO?: Player;
 
   constructor(board: GameBoard, opponent: Opponent, uuid?: string) {
-    this.gameUuid = uuid ? uuid : randomUUID();
+    this.gameUuid = uuid ?? randomUUID();
     this.gameBoard = board;
     this.opponent = opponent;
     this.gameState = { status: 'wait' };
   }
 
-  getOpponent(): Opponent {
-    return this.opponent;
-  }
+  // ─── GETTERS ─────────────────────────────────────────────────────────────────
 
   getGameUuid(): string {
     return this.gameUuid;
+  }
+
+  getOpponent(): Opponent {
+    return this.opponent;
   }
 
   getGameState(): GameState {
@@ -32,7 +34,17 @@ export class Game {
     return this.gameBoard.getBoard();
   }
 
-  setState(state: GameState) {
+  getPlayerX(): Player | undefined {
+    return this.playerX;
+  }
+
+  getPlayerO(): Player | undefined {
+    return this.playerO;
+  }
+
+  // ─── SETTERS ─────────────────────────────────────────────────────────────────
+
+  setState(state: GameState): void {
     this.gameState = state;
   }
 
@@ -40,63 +52,53 @@ export class Game {
     this.playerX = player;
   }
 
-  getPlayerX(): Player | undefined {
-    return this.playerX;
-  }
-
-  switchPlayer() {
-    if (this.gameState.status === 'game') {
-      const currentPlayer: Player | undefined = this.gameState.currentPlayer;
-
-      if (!currentPlayer) throw new Error('Switch Player');
-
-      const nextCurrentPlayer: Player | undefined =
-        this.playerO?.uuid === currentPlayer.uuid ? this.playerX : this.playerO;
-
-      if (!nextCurrentPlayer)
-        throw new Error('Switch Player next current player');
-
-      this.gameState = { status: 'game', currentPlayer: nextCurrentPlayer };
-    }
-  }
-
   setPlayerO(player: Player): void {
     this.playerO = player;
   }
 
-  getPlayerO(): Player | undefined {
-    return this.playerO;
-  }
-
-  startGame(): void {
-    const currentPlayer = this.playerX;
-    if (this.opponent === 'computer')
-      this.gameState = { status: 'game', currentPlayer: currentPlayer };
-  }
-
-  setCurrentPlayer(currentPlayer: Player): void {
-    this.gameState = { status: 'game', currentPlayer };
-  }
-
-  setNewCell(move: { row: number; col: number; newCell: number }) {
+  setNewCell(move: { row: number; col: number; newCell: number }): void {
     this.gameBoard.setCell(move.row, move.col, move.newCell);
   }
 
-  takeTurn(row: number, col: number, value: number): GameState {
-    if (this.gameState.status === 'win' || this.gameState.status === 'draw') {
-      throw new Error(`O'yin allaqachon tugagan`);
+  // ─── O'YIN HOLATI ─────────────────────────────────────────────────────────────
+
+  /**
+   * O'yinni boshlaydi. PlayerX (1-raqam) har doim birinchi yuradi.
+   * VS Computer: darhol 'game' holatiga o'tadi.
+   * VS Player  : ikkala o'yinchi bo'lmaguncha 'wait' turadi.
+   */
+  startGame(): void {
+    if (this.opponent === 'computer') {
+      this.gameState = { status: 'game', currentPlayer: this.playerX };
+      return;
     }
 
-    if (!this.gameBoard.isEmpty(row, col)) {
-      throw new Error(`(${row}, ${col}) katagi band`);
+    // VS player: ikkala joy to'lganmi?
+    if (this.playerX && this.playerO) {
+      this.gameState = { status: 'game', currentPlayer: this.playerX };
+    } else {
+      this.gameState = { status: 'wait' };
     }
-
-    this.gameBoard.setCell(row, col, value);
-
-    this.checkGameOver();
-
-    return this.gameState;
   }
+
+  /**
+   * Navbatni keyingi o'yinchiga o'tkazadi.
+   */
+  switchPlayer(): void {
+    if (this.gameState.status !== 'game') return;
+
+    const current = this.gameState.currentPlayer;
+    if (!current) throw new Error("switchPlayer: currentPlayer yo'q");
+
+    const next =
+      this.playerO?.uuid === current.uuid ? this.playerX : this.playerO;
+
+    if (!next) throw new Error("switchPlayer: keyingi o'yinchi topilmadi");
+
+    this.gameState = { status: 'game', currentPlayer: next };
+  }
+
+  // ─── O'YIN LOGIKASI ───────────────────────────────────────────────────────────
 
   checkGameOver(): boolean {
     const winner = this.gameBoard.getWinner();
@@ -116,70 +118,70 @@ export class Game {
     return false;
   }
 
+  /**
+   * Yangi board bilan eski boardni solishtiradi.
+   * Faqat bitta katak o'zgargan bo'lsa, shu o'zgarishni qaytaradi.
+   */
   validateGameBoard(
     newGameBoard: GameBoard,
   ): { row: number; col: number; newCell: number } | null {
-    let changedCount = 0;
-
     if (this.gameBoard.getSize() !== newGameBoard.getSize()) {
       throw new Error(
-        `O'yinda maydonlar har-xilligi: Size:${this.gameBoard.getSize()} - Size:${newGameBoard.getSize()}`,
+        `Board o'lchami mos emas: ${this.gameBoard.getSize()} vs ${newGameBoard.getSize()}`,
       );
     }
 
     let move: { row: number; col: number; newCell: number } | null = null;
-
-    const boardSize = this.gameBoard.getSize();
-    for (let i = 0; i < boardSize; i++) {
-      for (let j = 0; j < boardSize; j++) {
-        const oldCell = this.gameBoard.getCell(i, j);
-        const newCell = newGameBoard.getCell(i, j);
-
-        if (oldCell !== newCell) {
-          if (oldCell !== 0) {
-            throw new Error(`(${i}, ${j}) katagi allaqachon band!`);
-          }
-
-          if (newCell === 0) {
-            throw new Error(`Katakni o'chirib bo'lmaydi!`);
-          }
-
-          changedCount++;
-          move = { row: i, col: j, newCell: newCell };
-        }
-
-        if (changedCount > 1) {
-          return null;
-        }
-      }
-    }
-
-    if (changedCount === 0) return null;
-
-    return move;
-  }
-
-  getBestMove(): { row: number; col: number; newCell: number } | null {
-    let bestScore = -Infinity;
-    let bestMove: { row: number; col: number; newCell: number } | null = null;
-
+    let changedCount = 0;
     const size = this.gameBoard.getSize();
-
-    const computer = this.playerX?.uuid === 'computer' ? 1 : 2;
-    const player = computer === 1 ? 2 : 1;
 
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
-        if (this.gameBoard.isEmpty(i, j)) {
-          const clonedBoard = this.gameBoard.clone();
-          clonedBoard.setCell(i, j, computer);
+        const old = this.gameBoard.getCell(i, j);
+        const next = newGameBoard.getCell(i, j);
 
-          const score = this.minimax(clonedBoard, 0, false, computer, player);
+        if (old === next) continue;
 
-          if (score > bestScore) {
-            bestScore = score;
-            bestMove = { row: i, col: j, newCell: computer };
-          }
+        if (old !== 0) {
+          throw new Error(`(${i},${j}) katak allaqachon band`);
+        }
+
+        if (next === 0) {
+          throw new Error(`Katakni bo'shatib bo'lmaydi`);
+        }
+
+        changedCount++;
+        move = { row: i, col: j, newCell: next };
+
+        if (changedCount > 1) return null;
+      }
+    }
+
+    return changedCount === 0 ? null : move;
+  }
+
+  // ─── MINIMAX ─────────────────────────────────────────────────────────────────
+
+  getBestMove(): { row: number; col: number; newCell: number } | null {
+    const computer = this.playerX?.uuid === 'computer' ? 1 : 2;
+    const player = computer === 1 ? 2 : 1;
+    const size = this.gameBoard.getSize();
+
+    let bestScore = -Infinity;
+    let bestMove: { row: number; col: number; newCell: number } | null = null;
+
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
+        if (!this.gameBoard.isEmpty(i, j)) continue;
+
+        const cloned = this.gameBoard.clone();
+        cloned.setCell(i, j, computer);
+
+        const score = this.minimax(cloned, 0, false, computer, player);
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = { row: i, col: j, newCell: computer };
         }
       }
     }
@@ -203,49 +205,43 @@ export class Game {
     const size = board.getSize();
 
     if (isMaximizing) {
-      let bestScore = -Infinity;
+      let best = -Infinity;
       for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-          if (board.isEmpty(i, j)) {
-            const cloned = board.clone();
-            cloned.setCell(i, j, computerValue);
-            bestScore = Math.max(
-              bestScore,
-              this.minimax(
-                cloned,
-                depth + 1,
-                false,
-                computerValue,
-                playerValue,
-              ),
-            );
-          }
+          if (!board.isEmpty(i, j)) continue;
+          const cloned = board.clone();
+          cloned.setCell(i, j, computerValue);
+          best = Math.max(
+            best,
+            this.minimax(cloned, depth + 1, false, computerValue, playerValue),
+          );
         }
       }
-      return bestScore;
+      return best;
     } else {
-      let bestScore = Infinity;
+      let best = Infinity;
       for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-          if (board.isEmpty(i, j)) {
-            const cloned = board.clone();
-            cloned.setCell(i, j, playerValue);
-            bestScore = Math.min(
-              bestScore,
-              this.minimax(cloned, depth + 1, true, computerValue, playerValue),
-            );
-          }
+          if (!board.isEmpty(i, j)) continue;
+          const cloned = board.clone();
+          cloned.setCell(i, j, playerValue);
+          best = Math.min(
+            best,
+            this.minimax(cloned, depth + 1, true, computerValue, playerValue),
+          );
         }
       }
-      return bestScore;
+      return best;
     }
   }
 }
 
+// ─── TYPES ───────────────────────────────────────────────────────────────────
+
 export type Opponent = 'player' | 'computer';
 
 export type GameState =
-  | { status: 'wait'; currentPlayer?: Player }
+  | { status: 'wait' }
   | { status: 'game'; currentPlayer?: Player }
   | { status: 'draw' }
   | { status: 'win'; winnerPlayer: Player };

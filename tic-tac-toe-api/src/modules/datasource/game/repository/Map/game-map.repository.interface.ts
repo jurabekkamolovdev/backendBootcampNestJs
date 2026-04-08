@@ -10,6 +10,8 @@ export interface IGameRepositoryMap {
   findById(gameUuid: string): Game | null;
 
   isPlayerInGame(playerUuid: string): boolean;
+
+  saveSecondPlayer(domainGame: Game, playerUuid: string): boolean;
 }
 
 export const GAMES_REPOSITORY_MAP = Symbol('GAMES_REPOSITORY_MAP');

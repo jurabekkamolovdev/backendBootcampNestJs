@@ -1,16 +1,15 @@
 @access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU2NTMwNjcsImV4cCI6MTc3NTY1Mzk2N30.Jlw7tCkI0r6llCt0bMLW_SWsKMtM2bn4XSvhuulRhdM
-@playerUuid = 5fe98269-6e99-450a-9f99-e27c2179906b
+@gameUuid = 17c66769-328d-4976-ba4c-37f676442f71
 
-POST http://localhost:3000/game/
+
+POST http://localhost:3000/game/{{gameUuid}}/move/
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "playerUuid": "{{playerUuid}}",
-  "opponent": "player",
-  "board": [
-    [0, 0, 0],
-    [0, 0, 0],
+  "newBoard": [
+    [1, 2, 0],
+    [1, 2, 0],
     [0, 0, 0]
   ]
 }

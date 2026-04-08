@@ -42,15 +42,16 @@ export class GameController {
     return resultDomain;
   }
 
-  @Post(':gameUuid/:playerUuid/move')
+  @UseGuards(JwtAuthGuard)
+  @Post(':gameUuid/move')
   async makeMove(
+    @Request() req: { user: JwtPayload },
     @Param('gameUuid') gameUuid: string,
-    @Param('playerUuid') playerUuid: string,
     @Body() dto: MoveGameRequestDto,
   ) {
     const resultDomain: MakeMoveResult = await this.gameService.makeMove(
       gameUuid,
-      playerUuid,
+      req.user.uuid,
       dto.newBoard,
     );
 

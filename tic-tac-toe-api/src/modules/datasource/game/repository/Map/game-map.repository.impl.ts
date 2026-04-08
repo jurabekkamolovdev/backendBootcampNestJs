@@ -12,10 +12,7 @@ export class GameRepositoryMapImpl implements IGameRepositoryMap {
   constructor(private readonly gameDataMapper: GameDataMapper) {}
 
   save(domainGame: Game, playerUuid: string): boolean {
-    const entity: IGameEntity = this.gameDataMapper.toEntity(domainGame);
-    if (!entity?.uuid) {
-      throw new Error(`GameEntity UUID mavjud emas`);
-    }
+    const entity = this.toEntity(domainGame);
 
     if (this._db.has(entity.uuid)) {
       throw new Error(`O'yin allaqachon mavjud: ${entity.uuid}`);
@@ -27,49 +24,64 @@ export class GameRepositoryMapImpl implements IGameRepositoryMap {
     return true;
   }
 
-  delete(domainGame: Game): void {
-    const entity: IGameEntity = this.gameDataMapper.toEntity(domainGame);
-
-    if (!this._db.has(entity.uuid)) {
-      throw new Error(`O'yin mavjud emas: ${entity.uuid}`);
-    }
-
-    this._db.delete(entity.uuid);
-
-    if (entity.playerO) {
-      if (this._playerGame.has(entity.playerO.uuid))
-        this._playerGame.delete(entity.playerO.uuid);
-    }
-
-    if (entity.playerX) {
-      if (this._playerGame.has(entity.playerX.uuid))
-        this._playerGame.delete(entity.playerX.uuid);
-    }
-  }
-
-  update(domainGame: Game): boolean {
-    const entity: IGameEntity = this.gameDataMapper.toEntity(domainGame);
+  // joinGame da ikkinchi o'yinchi qo'shilganda chaqiriladi
+  saveSecondPlayer(domainGame: Game, playerUuid: string): boolean {
+    const entity = this.toEntity(domainGame);
 
     if (!this._db.has(entity.uuid)) {
       throw new Error(`O'yin topilmadi: ${entity.uuid}`);
     }
 
     this._db.set(entity.uuid, entity);
+    this._playerGame.add(playerUuid);
 
-    console.log(entity);
+    return true;
+  }
+
+  delete(domainGame: Game): void {
+    const entity = this.toEntity(domainGame);
+
+    if (!this._db.has(entity.uuid)) {
+      throw new Error(`O'yin topilmadi: ${entity.uuid}`);
+    }
+
+    this._db.delete(entity.uuid);
+
+    if (entity.playerX?.uuid) {
+      this._playerGame.delete(entity.playerX.uuid);
+    }
+
+    if (entity.playerO?.uuid) {
+      this._playerGame.delete(entity.playerO.uuid);
+    }
+  }
+
+  update(domainGame: Game): boolean {
+    const entity = this.toEntity(domainGame);
+
+    if (!this._db.has(entity.uuid)) {
+      throw new Error(`O'yin topilmadi: ${entity.uuid}`);
+    }
+
+    this._db.set(entity.uuid, entity);
     return true;
   }
 
   findById(gameUuid: string): Game | null {
-    const entity: IGameEntity | undefined = this._db.get(gameUuid);
-    if (!entity) {
-      return null;
-    }
-
+    const entity = this._db.get(gameUuid);
+    if (!entity) return null;
     return this.gameDataMapper.toDomain(entity);
   }
 
   isPlayerInGame(playerUuid: string): boolean {
     return this._playerGame.has(playerUuid);
+  }
+
+  private toEntity(domainGame: Game): IGameEntity {
+    const entity = this.gameDataMapper.toEntity(domainGame);
+    if (!entity?.uuid) {
+      throw new Error(`GameEntity UUID mavjud emas`);
+    }
+    return entity;
   }
 }
