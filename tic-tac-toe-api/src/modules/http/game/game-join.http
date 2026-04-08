@@ -1,0 +1,6 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiY2E0OWJhYWUtNDdjMi00YWJlLWE4YmEtNDQ2NWQwNWU5YWEwIiwibG9naW4iOiJ0dXJuZXJrbyIsImlhdCI6MTc3NTY0OTMyOCwiZXhwIjoxNzc1NjUwMjI4fQ.LIniPFmiq6KmUmjxQGss0UnO0jCJd3_hAbr16Xm7VwA
+@gameUuid = 6a38111f-d275-4989-9dc7-43d258775936
+
+
+POST http://localhost:3000/game/{{gameUuid}}/join/
+Authorization: Bearer {{access_token}}

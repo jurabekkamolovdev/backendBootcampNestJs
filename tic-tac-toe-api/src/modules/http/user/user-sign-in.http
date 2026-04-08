@@ -1,2 +1,7 @@
 POST http://localhost:3000/user/signin
 Authorization: Basic amtzOjIwMDI=
+
+###
+
+POST http://localhost:3000/user/signin
+Authorization: Basic dHVybmVya286MjAyMA==

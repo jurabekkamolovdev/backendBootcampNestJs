@@ -44,6 +44,22 @@ export class Game {
     return this.playerX;
   }
 
+  switchPlayer() {
+    if (this.gameState.status === 'game') {
+      const currentPlayer: Player | undefined = this.gameState.currentPlayer;
+
+      if (!currentPlayer) throw new Error('Switch Player');
+
+      const nextCurrentPlayer: Player | undefined =
+        this.playerO?.uuid === currentPlayer.uuid ? this.playerX : this.playerO;
+
+      if (!nextCurrentPlayer)
+        throw new Error('Switch Player next current player');
+
+      this.gameState = { status: 'game', currentPlayer: nextCurrentPlayer };
+    }
+  }
+
   setPlayerO(player: Player): void {
     this.playerO = player;
   }
@@ -54,6 +70,11 @@ export class Game {
 
   startGame(): void {
     const currentPlayer = this.playerX;
+    if (this.opponent === 'computer')
+      this.gameState = { status: 'game', currentPlayer: currentPlayer };
+  }
+
+  setCurrentPlayer(currentPlayer: Player): void {
     this.gameState = { status: 'game', currentPlayer };
   }
 
@@ -224,7 +245,7 @@ export class Game {
 export type Opponent = 'player' | 'computer';
 
 export type GameState =
-  | { status: 'wait' }
+  | { status: 'wait'; currentPlayer?: Player }
   | { status: 'game'; currentPlayer?: Player }
   | { status: 'draw' }
   | { status: 'win'; winnerPlayer: Player };

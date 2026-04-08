@@ -33,7 +33,6 @@ export class GameController {
     @Request() req: { user: JwtPayload },
     @Body() dto: CreateGameRequestDto,
   ): CreateGameResult {
-    console.log(req.user);
     const resultDomain: CreateGameResult = this.gameService.createGame(
       dto.playerUuid,
       dto.opponent,
@@ -56,5 +55,14 @@ export class GameController {
     );
 
     return resultDomain;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':gameUuid/join')
+  joinGame(
+    @Request() req: { user: JwtPayload },
+    @Param('gameUuid') gameUuid: string,
+  ) {
+    return this.gameService.joinGame(gameUuid, req.user.uuid);
   }
 }

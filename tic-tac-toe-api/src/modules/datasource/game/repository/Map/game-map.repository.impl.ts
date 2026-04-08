@@ -55,12 +55,13 @@ export class GameRepositoryMapImpl implements IGameRepositoryMap {
     }
 
     this._db.set(entity.uuid, entity);
+
+    console.log(entity);
     return true;
   }
 
   findById(gameUuid: string): Game | null {
     const entity: IGameEntity | undefined = this._db.get(gameUuid);
-    console.log(entity);
     if (!entity) {
       return null;
     }

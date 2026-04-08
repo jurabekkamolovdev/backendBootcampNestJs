@@ -13,6 +13,8 @@ export interface IGameService {
     playerUuid: string,
     newBoard: number[][],
   ): Promise<MakeMoveResult>;
+
+  joinGame(gameUuid: string, playerUuid: string): CreateGameResult;
 }
 
 export const GAME_SERVICE = Symbol('GAME_SERVICE');

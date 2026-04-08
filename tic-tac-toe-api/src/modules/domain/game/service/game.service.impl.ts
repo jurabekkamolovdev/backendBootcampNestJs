@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IGameService } from './game.service.interface';
-import { Opponent, Player, Game } from '../model/game.model';
+import { Opponent, Player, Game, GameState } from '../model/game.model';
 import { GameBoard } from '../model/game-board.model';
 import {
   type IGameRepository,
@@ -61,6 +61,7 @@ export class GameServiceImpl implements IGameService {
       const row = this.getRandom(0, 2);
       const col = this.getRandom(0, 2);
       game.takeTurn(row, col, 1);
+      game.switchPlayer();
     }
 
     this.gameRepositoryMap.save(game, playerUuid);
@@ -86,6 +87,14 @@ export class GameServiceImpl implements IGameService {
       throw new Error(`Bunday o'yin mavjud emas: ${gameUuid}`);
     }
 
+    const gameState: GameState = game.getGameState();
+
+    if (gameState.status === 'game') {
+      if (gameState.currentPlayer?.uuid !== playerUuid) {
+        throw new Error(`Sizning yurish navbatingiz emas`);
+      }
+    }
+
     const move = game.validateGameBoard(newGameBoard);
 
     if (!move) {
@@ -109,15 +118,61 @@ export class GameServiceImpl implements IGameService {
       const bestMove = game.getBestMove();
       if (bestMove) {
         game.setNewCell(bestMove);
-        game.checkGameOver();
+        if (game.checkGameOver()) {
+          await this.gameRepository.save(game);
+          this.gameRepositoryMap.delete(game);
+          return {
+            gameUuid: game.getGameUuid(),
+            playerState: move.newCell as 1 | 2,
+            gameState: game.getGameState(),
+            board: game.getBoard(),
+          };
+        }
       }
     }
+
+    game.switchPlayer();
 
     this.gameRepositoryMap.update(game);
 
     return {
       gameUuid: game.getGameUuid(),
       playerState: move.newCell as 1 | 2,
+      gameState: game.getGameState(),
+      board: game.getBoard(),
+    };
+  }
+
+  joinGame(gameUuid: string, playerUuid: string): CreateGameResult {
+    const isInGame = this.gameRepositoryMap.isPlayerInGame(playerUuid);
+
+    if (isInGame) {
+      throw new Error(`Siz allaqchon o'yindasiz!!!`);
+    }
+
+    const game: Game | null = this.gameRepositoryMap.findById(gameUuid);
+
+    if (!game) {
+      throw new Error(`Bunday o'yin mavjud emas: ${gameUuid}`);
+    }
+
+    if (game.getOpponent() === 'computer') {
+      throw new Error(`Bu o'yinga qo'shila olmasiz: ${gameUuid}`);
+    }
+
+    const playerX: Player | undefined = game.getPlayerX();
+
+    if (!playerX) {
+      game.setPlayerX({ uuid: playerUuid, state: 1 });
+    } else {
+      game.setPlayerO({ uuid: playerUuid, state: 2 });
+    }
+
+    this.gameRepositoryMap.update(game);
+
+    return {
+      gameUuid: game.getGameUuid(),
+      playerState: 1,
       gameState: game.getGameState(),
       board: game.getBoard(),
     };
