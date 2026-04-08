@@ -6,6 +6,7 @@ import {
   Param,
   UseGuards,
   Request,
+  Get,
 } from '@nestjs/common';
 import {
   type IGameService,
@@ -34,7 +35,7 @@ export class GameController {
     @Body() dto: CreateGameRequestDto,
   ): CreateGameResult {
     const resultDomain: CreateGameResult = this.gameService.createGame(
-      dto.playerUuid,
+      req.user.uuid,
       dto.opponent,
       dto.board,
     );
@@ -65,5 +66,21 @@ export class GameController {
     @Param('gameUuid') gameUuid: string,
   ) {
     return this.gameService.joinGame(gameUuid, req.user.uuid);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  getAvailableGames(@Request() req: { user: JwtPayload }) {
+    console.log(req.user);
+
+    return this.gameService.getAvailableGames();
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get(':gameUuid')
+  async getGameById(
+    @Request() req: { user: JwtPayload },
+    @Param('gameUuid') gameUuid: string,
+  ) {
+    return await this.gameService.getGameById(gameUuid);
   }
 }

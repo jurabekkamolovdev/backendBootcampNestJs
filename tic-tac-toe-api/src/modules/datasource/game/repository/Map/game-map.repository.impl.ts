@@ -77,6 +77,19 @@ export class GameRepositoryMapImpl implements IGameRepositoryMap {
     return this._playerGame.has(playerUuid);
   }
 
+  getAvailableGames(): Array<Game> {
+    const games: Array<Game> = [];
+
+    for (const entity of this._db.values()) {
+      if (entity.opponent === 'player' && entity.state.status === 'wait') {
+        const game: Game = this.gameDataMapper.toDomain(entity);
+
+        games.push(game);
+      }
+    }
+    return games;
+  }
+
   private toEntity(domainGame: Game): IGameEntity {
     const entity = this.gameDataMapper.toEntity(domainGame);
     if (!entity?.uuid) {

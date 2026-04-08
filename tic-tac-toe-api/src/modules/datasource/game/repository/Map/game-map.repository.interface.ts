@@ -12,6 +12,8 @@ export interface IGameRepositoryMap {
   isPlayerInGame(playerUuid: string): boolean;
 
   saveSecondPlayer(domainGame: Game, playerUuid: string): boolean;
+
+  getAvailableGames(): Array<Game>;
 }
 
 export const GAMES_REPOSITORY_MAP = Symbol('GAMES_REPOSITORY_MAP');

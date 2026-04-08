@@ -1,14 +1,5 @@
 @access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU2NTY2MTcsImV4cCI6MTc3NTY1NzUxN30.-rgtMWGW2AHWzLM1poqwy2AUXGiqHGL6pXF4AZ1Til4
+@gameUuid = b978567f-d935-48e4-8bd2-419d0d58b61b
 
-POST http://localhost:3000/game/
+GET http://localhost:3000/game/{{gameUuid}}
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
-
-{
-  "opponent": "player",
-  "board": [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0]
-  ]
-}

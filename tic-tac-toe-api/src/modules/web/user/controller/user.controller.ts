@@ -1,9 +1,22 @@
-import { Body, Controller, Inject, Post, Headers } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Post,
+  Headers,
+  UseGuards,
+  Request,
+  Get,
+  Param,
+} from '@nestjs/common';
 import {
   type IUserService,
   USER_SERVICE,
 } from 'src/modules/domain/user/service/user.service.interface';
 import { CreateUserRequestDto } from '../model/request/user-create.request';
+import { JwtAuthGuard } from 'src/modules/infrastructure/jwt/jwt-auth.guard';
+import { JwtPayload } from 'src/modules/infrastructure/jwt/jwt.strategy';
+import { User } from 'src/modules/domain/user/model/user.model';
 
 @Controller('user')
 export class UserController {
@@ -31,5 +44,19 @@ export class UserController {
       access_token: access_token,
       uuid: uuid,
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':userUuid')
+  async getUserByUuid(
+    @Request() req: { user: JwtPayload },
+    @Param('userUuid') userUuid: string,
+  ) {
+    console.log(req.user);
+    const user: User | null = await this.userService.getUserByUuid(userUuid);
+    if (!user) {
+      return false;
+    }
+    return user;
   }
 }

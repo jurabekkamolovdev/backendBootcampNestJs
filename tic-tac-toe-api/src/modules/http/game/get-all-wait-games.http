@@ -1,0 +1,4 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU2NTU5NjYsImV4cCI6MTc3NTY1Njg2Nn0.VP3Xbah7MJkD3q5Y3U5nEsRvocDObGZs-xag3DZw7XU
+
+GET http://localhost:3000/game/
+Authorization: Bearer {{access_token}}

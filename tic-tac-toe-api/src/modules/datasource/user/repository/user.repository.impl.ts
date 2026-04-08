@@ -36,4 +36,20 @@ export class UserRepositoryImpl implements IUserRepository {
     }
     return this.mapper.toDomain(entity);
   }
+
+  async findByUuid(userUuid: string): Promise<User | null> {
+    const entity: UserEntity | null = await this.users.findOne({
+      where: {
+        id: userUuid,
+      },
+    });
+
+    if (!entity) {
+      return null;
+    }
+
+    const user: User = this.mapper.toDomain(entity);
+
+    return user;
+  }
 }

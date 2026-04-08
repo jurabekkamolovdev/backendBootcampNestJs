@@ -200,6 +200,22 @@ export class GameServiceImpl implements IGameService {
     return this.buildMoveResult(game, move.newCell as 1 | 2);
   }
 
+  getAvailableGames(): Array<Game> {
+    const games: Array<Game> = this.gameRepositoryMap.getAvailableGames();
+
+    return games;
+  }
+
+  async getGameById(gameUuid: string): Promise<Game | null> {
+    let game: Game | null = this.gameRepositoryMap.findById(gameUuid);
+
+    if (!game) {
+      game = await this.gameRepository.findById(gameUuid);
+    }
+
+    return game;
+  }
+
   // ─── YORDAMCHI METODLAR ───────────────────────────────────────────────────────
 
   private assertGameIsActive(game: Game, playerUuid: string): void {

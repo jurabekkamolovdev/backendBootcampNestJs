@@ -5,7 +5,7 @@ export interface IUserRepository {
 
   // update(domainUser: User): boolean;
 
-  // findById(userUuid: string): User | null;
+  findByUuid(userUuid: string): Promise<User | null>;
 
   findByLogin(userLogin: string): Promise<User | null>;
 }
