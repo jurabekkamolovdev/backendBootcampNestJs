@@ -13,21 +13,26 @@ import {
   type IUserService,
   USER_SERVICE,
 } from 'src/modules/domain/user/service/user.service.interface';
-import { CreateUserRequestDto } from '../model/request/user-create.request';
-import { JwtAuthGuard } from 'src/modules/infrastructure/jwt/jwt-auth.guard';
+import { JwtRequestDto } from '../model/request/user-sigup.request';
+import {
+  JwtAuthGuard,
+  JwtRefreshGuard,
+} from 'src/modules/infrastructure/jwt/jwt-auth.guard';
 import { JwtPayload } from 'src/modules/infrastructure/jwt/jwt.strategy';
 import { User } from 'src/modules/domain/user/model/user.model';
+import { UserWebMapper } from '../mapper/user-web.mapper';
 
 @Controller('user')
 export class UserController {
   constructor(
     @Inject(USER_SERVICE)
     private readonly userService: IUserService,
+    private readonly userWebMapper: UserWebMapper,
   ) {}
 
   @Post('signup')
-  async signUp(@Body() dto: CreateUserRequestDto) {
-    await this.userService.createUser(dto.login, dto.password);
+  async signUp(@Body() dto: JwtRequestDto) {
+    await this.userService.signUpUser(dto.login, dto.password);
 
     return true;
   }
@@ -38,12 +43,12 @@ export class UserController {
       throw new Error('Basic auth header required');
     }
 
-    const { access_token, uuid }: { access_token: string; uuid: string } =
+    const response: { access_token: string; refresh_token: string } =
       await this.userService.signInUser(authHeader);
-    return {
-      access_token: access_token,
-      uuid: uuid,
-    };
+    return this.userWebMapper.toJwtResopnse(
+      response.access_token,
+      response.refresh_token,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -58,5 +63,16 @@ export class UserController {
       return false;
     }
     return user;
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Post('refresh')
+  async refresh(@Request() req: { user: JwtPayload }) {
+    const resoponse = await this.userService.refreshTokens(req.user);
+
+    return this.userWebMapper.toJwtResopnse(
+      resoponse.access_token,
+      resoponse.refresh_token,
+    );
   }
 }

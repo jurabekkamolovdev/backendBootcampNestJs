@@ -22,3 +22,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return payload;
   }
 }
+
+@Injectable()
+export class JwtRefreshStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
+  constructor(config: ConfigService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: config.get<string>(
+        'JWT_REFRESH_SECRET',
+        'refresh_secret_key',
+      ),
+    });
+  }
+
+  validate(payload: JwtPayload): JwtPayload {
+    return payload;
+  }
+}

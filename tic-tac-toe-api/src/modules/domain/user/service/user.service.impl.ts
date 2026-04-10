@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { type IUserService } from './user.service.interface';
 import { User } from '../model/user.model';
-import { CreateUserResult } from '../model/user-result';
+import { ConfigService } from '@nestjs/config';
 import {
   type IUserRepositoryMap,
   USER_REPOSITORY_MAP,
@@ -11,6 +11,7 @@ import {
   USER_REPOSITORY,
 } from 'src/modules/datasource/user/repository/user.repository.interface';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/modules/infrastructure/jwt/jwt.strategy';
 
 @Injectable()
 export class UserServiceImpl implements IUserService {
@@ -20,24 +21,22 @@ export class UserServiceImpl implements IUserService {
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
     private readonly jwtService: JwtService,
+    private readonly config: ConfigService,
   ) {}
 
-  async createUser(login: string, password: string): Promise<CreateUserResult> {
+  async signUpUser(login: string, password: string): Promise<boolean> {
     // if (this.userRepositoryMap.findByLogin(login)) {
     //   throw new Error(`Bunday foydalanuvchi mavjud: ${login}`);
     // }
 
     const user = await User.createUser(login, password);
     await this.userRepository.save(user);
-    return {
-      userUuid: user.getUuid(),
-      login: user.getLogin(),
-    };
+    return true;
   }
 
   async signInUser(
     authHeader: string,
-  ): Promise<{ access_token: string; uuid: string }> {
+  ): Promise<{ access_token: string; refresh_token: string }> {
     const base64Credentials = authHeader.replace('Basic ', '');
     const decode = Buffer.from(base64Credentials, 'base64').toString('utf-8');
     const [login, password] = decode.split(':');
@@ -51,15 +50,16 @@ export class UserServiceImpl implements IUserService {
 
     const isMatch: boolean = await user.verifyPassword(password);
 
+    const payload: JwtPayload = {
+      uuid: user.getUuid(),
+      login: user.getLogin(),
+    };
+
     if (!isMatch) {
       throw new Error('Invalid password');
     }
-    const access_token: string = await this.jwtService.signAsync({
-      uuid: user.getUuid(),
-      login: user.getLogin(),
-    });
 
-    return { access_token: access_token, uuid: user.getUuid() };
+    return this.refreshTokens(payload);
   }
 
   async getUserByUuid(userUuid: string): Promise<User | null> {
@@ -70,5 +70,21 @@ export class UserServiceImpl implements IUserService {
     }
 
     return user;
+  }
+
+  async refreshTokens(
+    payload: JwtPayload,
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    const cleanPayload: JwtPayload = {
+      uuid: payload.uuid,
+      login: payload.login,
+    };
+    return {
+      access_token: await this.jwtService.signAsync(cleanPayload),
+      refresh_token: await this.jwtService.signAsync(cleanPayload, {
+        secret: this.config.get('JWT_REFRESH_SECRET', 'refresh_secret'),
+        expiresIn: this.config.get('JWT_REFRESH_EXPIRES_IN', '7d'),
+      }),
+    };
   }
 }

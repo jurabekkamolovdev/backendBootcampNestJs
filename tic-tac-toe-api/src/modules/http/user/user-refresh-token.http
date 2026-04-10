@@ -1,0 +1,12 @@
+@refresh_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU4MjY2ODMsImV4cCI6MTc3NjQzMTQ4M30.vs8o4M_1bhqgHWDhKPxskAQC7bVtiKHvHJ0HGerN7Ew
+
+POST http://localhost:3000/user/refresh
+Authorization: Bearer {{refresh_token}}
+
+###
+
+{
+  "type": "Bearer",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU4MjY2ODMsImV4cCI6MTc3NTgyNjgwM30.QqIwPmB-iqby_er0TRKB34VwB6PcHqR1ObuXjnse7LU",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU4MjY2ODMsImV4cCI6MTc3NjQzMTQ4M30.vs8o4M_1bhqgHWDhKPxskAQC7bVtiKHvHJ0HGerN7Ew"
+}
