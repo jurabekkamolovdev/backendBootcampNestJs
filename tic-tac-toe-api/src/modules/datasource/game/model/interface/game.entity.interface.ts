@@ -6,6 +6,7 @@ import {
 
 export interface IGameEntity {
   uuid: string;
+  created_at: Date;
   board: {
     cells: number[][];
     size: number;

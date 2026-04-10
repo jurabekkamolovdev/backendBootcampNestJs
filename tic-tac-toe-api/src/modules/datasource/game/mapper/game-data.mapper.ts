@@ -8,6 +8,7 @@ export class GameDataMapper {
   toEntity(domainGame: Game): IGameEntity {
     return {
       uuid: domainGame.getGameUuid(),
+      created_at: domainGame.getCreatedAt(),
       board: {
         cells: domainGame.getBoard(),
         size: 3,
@@ -22,7 +23,12 @@ export class GameDataMapper {
   toDomain(entity: IGameEntity): Game {
     const gameBoard = new GameBoard(entity.board.cells);
 
-    const game: Game = new Game(gameBoard, entity.opponent, entity.uuid);
+    const game: Game = new Game(
+      gameBoard,
+      entity.opponent,
+      entity.uuid,
+      entity.created_at,
+    );
 
     game.setState(entity.state);
     game.setPlayerX(entity.playerX!);

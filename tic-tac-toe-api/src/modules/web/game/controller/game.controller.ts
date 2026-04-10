@@ -69,6 +69,13 @@ export class GameController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('history')
+  async getAllFinishGames(@Request() req: { user: JwtPayload }) {
+    console.log(req.user);
+    return this.gameService.getAllFinishGames(req.user.uuid);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   getAvailableGames(@Request() req: { user: JwtPayload }) {
     console.log(req.user);

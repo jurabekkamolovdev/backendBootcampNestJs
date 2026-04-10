@@ -1,5 +1,5 @@
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU2NTMwNjcsImV4cCI6MTc3NTY1Mzk2N30.Jlw7tCkI0r6llCt0bMLW_SWsKMtM2bn4XSvhuulRhdM
-@gameUuid = 17c66769-328d-4976-ba4c-37f676442f71
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWZlOTgyNjktNmU5OS00NTBhLTlmOTktZTI3YzIxNzk5MDZiIiwibG9naW4iOiJqa3MiLCJpYXQiOjE3NzU4Mjc1NzUsImV4cCI6MTc3NTgyODc3NX0.7o3YyJnkSy1ubZJhi4wrx65pGVluEfVHl-5Gbk4BOGs
+@gameUuid = e2d7095c-c03f-4bcf-90b5-20b61d43fd65
 
 
 POST http://localhost:3000/game/{{gameUuid}}/move/
@@ -10,6 +10,6 @@ Content-Type: application/json
   "newBoard": [
     [1, 2, 0],
     [1, 2, 0],
-    [0, 0, 0]
+    [1, 0, 0]
   ]
 }

@@ -25,6 +25,8 @@ export class GameEntity extends Model {
     cells: number[][];
     size: number;
   };
+  @Column({ type: DataType.DATE, field: 'created_at' })
+  declare created_at: Date;
 
   @Column({ type: DataType.STRING })
   declare opponent: Opponent;

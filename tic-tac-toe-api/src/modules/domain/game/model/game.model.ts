@@ -3,14 +3,21 @@ import { GameBoard } from './game-board.model';
 
 export class Game {
   private readonly gameUuid: string;
+  private readonly gameCreatedAt: Date;
   private readonly gameBoard: GameBoard;
   private readonly opponent: Opponent;
   private gameState: GameState;
   private playerX?: Player;
   private playerO?: Player;
 
-  constructor(board: GameBoard, opponent: Opponent, uuid?: string) {
+  constructor(
+    board: GameBoard,
+    opponent: Opponent,
+    uuid?: string,
+    createdAt?: Date,
+  ) {
     this.gameUuid = uuid ?? randomUUID();
+    this.gameCreatedAt = createdAt ?? new Date();
     this.gameBoard = board;
     this.opponent = opponent;
     this.gameState = { status: 'wait' };
@@ -40,6 +47,10 @@ export class Game {
 
   getPlayerO(): Player | undefined {
     return this.playerO;
+  }
+
+  getCreatedAt(): Date {
+    return this.gameCreatedAt;
   }
 
   // ─── SETTERS ─────────────────────────────────────────────────────────────────

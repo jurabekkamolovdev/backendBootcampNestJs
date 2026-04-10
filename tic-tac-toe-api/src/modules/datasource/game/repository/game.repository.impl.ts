@@ -5,6 +5,7 @@ import { IGameEntity } from '../model/interface/game.entity.interface';
 import { GameDataMapper } from '../mapper/game-data.mapper';
 import { Game } from 'src/modules/domain/game/model/game.model';
 import { IGameRepository } from './game.repository.interface';
+import { literal } from 'sequelize';
 
 @Injectable()
 export class GameRepositoryImpl implements IGameRepository {
@@ -19,6 +20,7 @@ export class GameRepositoryImpl implements IGameRepository {
     await this.games.upsert({
       uuid: entity.uuid,
       board: entity.board,
+      created_at: entity.created_at,
       opponent: entity.opponent,
       state: entity.state,
       playerX: entity.playerX,
@@ -32,8 +34,11 @@ export class GameRepositoryImpl implements IGameRepository {
 
     if (!dbModel) return null;
 
+    console.log(dbModel);
+
     const entity: IGameEntity = {
       uuid: dbModel.uuid,
+      created_at: dbModel.created_at,
       board: dbModel.board,
       opponent: dbModel.opponent,
       state: dbModel.state,
@@ -58,5 +63,31 @@ export class GameRepositoryImpl implements IGameRepository {
     );
 
     return affectedRows > 0;
+  }
+
+  async getAllFinishGames(playerUuid: string): Promise<Array<Game> | null> {
+    const games: Array<Game> = [];
+    console.log(playerUuid);
+
+    const entityGames: Array<GameEntity> = await this.games.findAll({
+      where: literal(
+        `(("playerX"->>'uuid' = '${playerUuid}') OR ("playerO"->>'uuid' = '${playerUuid}'))
+        AND (("state"->>'status' = 'draw') OR ("state"->'winnerPlayer'->>'uuid' = '${playerUuid}'))
+        `,
+      ),
+    });
+
+    console.log(entityGames);
+
+    if (entityGames.length === 0) {
+      return null;
+    }
+
+    for (const entityGame of entityGames) {
+      const game = this.mapper.toDomain(entityGame);
+
+      games.push(game);
+    }
+    return games;
   }
 }

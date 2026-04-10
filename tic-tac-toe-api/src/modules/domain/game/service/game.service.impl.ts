@@ -216,6 +216,18 @@ export class GameServiceImpl implements IGameService {
     return game;
   }
 
+  async getAllFinishGames(playerUuid: string): Promise<Array<Game> | null> {
+    console.log(playerUuid);
+    const games: Array<Game> | null =
+      await this.gameRepository.getAllFinishGames(playerUuid);
+
+    if (!games) {
+      return null;
+    }
+
+    return games;
+  }
+
   // ─── YORDAMCHI METODLAR ───────────────────────────────────────────────────────
 
   private assertGameIsActive(game: Game, playerUuid: string): void {
@@ -265,6 +277,9 @@ export class GameServiceImpl implements IGameService {
   private buildCreateResult(game: Game, playerState: 1 | 2): CreateGameResult {
     return {
       gameUuid: game.getGameUuid(),
+      createdAt: new Date(game.getCreatedAt()).toLocaleString('uz-UZ', {
+        timeZone: 'Asia/Tashkent',
+      }),
       playerState,
       gameState: game.getGameState(),
       board: game.getBoard(),
@@ -274,6 +289,9 @@ export class GameServiceImpl implements IGameService {
   private buildMoveResult(game: Game, playerState: 1 | 2): MakeMoveResult {
     return {
       gameUuid: game.getGameUuid(),
+      createdAt: new Date(game.getCreatedAt()).toLocaleString('uz-UZ', {
+        timeZone: 'Asia/Tashkent',
+      }),
       playerState,
       gameState: game.getGameState(),
       board: game.getBoard(),
