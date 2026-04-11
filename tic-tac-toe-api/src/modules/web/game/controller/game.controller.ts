@@ -76,10 +76,9 @@ export class GameController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('available')
   getAvailableGames(@Request() req: { user: JwtPayload }) {
     console.log(req.user);
-
     return this.gameService.getAvailableGames();
   }
   @UseGuards(JwtAuthGuard)
@@ -92,7 +91,7 @@ export class GameController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('board/:limit')
+  @Get('leaderboard/:limit')
   async getLeaderboard(
     @Request() req: { user: JwtPayload },
     @Param('limit') limit: number,

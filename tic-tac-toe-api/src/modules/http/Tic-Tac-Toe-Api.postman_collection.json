@@ -1,0 +1,751 @@
+{
+  "info": {
+    "_postman_id": "d4a33d04-fa4b-472a-8d08-5c7b1d67ddf0",
+    "name": "Tic-Tac-Toe-Api",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52206303",
+    "_collection_link": "https://go.postman.co/collection/52206303-d4a33d04-fa4b-472a-8d08-5c7b1d67ddf0?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "SignUp",
+          "item": [
+            {
+              "name": "Player",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"login\": \"turnerko\",\r\n  \"password\": \"2020\"\r\n} ",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/user/signup/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "user",
+                    "signup",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "SignIn",
+          "item": [
+            {
+              "name": "FirstPlayer",
+              "request": {
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "password",
+                      "value": "2002",
+                      "type": "string"
+                    },
+                    {
+                      "key": "username",
+                      "value": "jks",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/user/signin",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "user",
+                    "signin"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "SecondPlayer",
+              "request": {
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "password",
+                      "value": "2020",
+                      "type": "string"
+                    },
+                    {
+                      "key": "username",
+                      "value": "turnerko",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/user/signin",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "user",
+                    "signin"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get",
+          "item": [
+            {
+              "name": "GetUserByUuid",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/user/{{user_uuid}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "user",
+                    "{{user_uuid}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Refresh",
+          "item": [
+            {
+              "name": "FirstPlayer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{refresh_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/user/refresh/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "user",
+                    "refresh",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "SecondPlayer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{refresh_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/user/refresh/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "user",
+                    "refresh",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Game",
+      "item": [
+        {
+          "name": "FirstPlayer",
+          "item": [
+            {
+              "name": "CreateGame",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"opponent\": \"player\",\r\n  \"board\": [\r\n    [0, 0, 0],\r\n    [0, 0, 0],\r\n    [0, 0, 0]\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/game/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "JoinGame",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/{{game_uuid}}/join/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "{{game_uuid}}",
+                    "join",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "MoveGame",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"newBoard\": [\r\n    [0, 0, 0],\r\n    [0, 0, 0],\r\n    [0, 0, 0]\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/game/{{game_uuid}}/move/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "{{game_uuid}}",
+                    "move",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "FindGameUuid",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/{{game_uuid}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "{{game_uuid}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetAllFinishGames",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/history",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "history"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "LeaderBoard",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/leaderboard/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "leaderboard",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetAvailableGames",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_first_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/available/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "available",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "SecondPlayer",
+          "item": [
+            {
+              "name": "CreateGame",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"opponent\": \"player\",\r\n  \"board\": [\r\n    [0, 0, 0],\r\n    [0, 0, 0],\r\n    [0, 0, 0]\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/game/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "JoinGame",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/{{game_uuid}}/join/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "{{game_uuid}}",
+                    "join",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "MoveGame",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"newBoard\": [\r\n    [0, 0, 0],\r\n    [0, 0, 0],\r\n    [0, 0, 0]\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/game/{{game_uuid}}/move/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "{{game_uuid}}",
+                    "move",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "FindGameUuid",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/{{game_uuid}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "{{game_uuid}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetAllFinishGames",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/history",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "history"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "LeaderBoard",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/leaderboard/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "leaderboard",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetAvailableGames",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token_second_player}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/game/available/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "game",
+                    "available",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "password",
+        "value": "2002",
+        "type": "string"
+      },
+      {
+        "key": "username",
+        "value": "jks",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
