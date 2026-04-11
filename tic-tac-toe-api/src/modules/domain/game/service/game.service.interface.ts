@@ -22,6 +22,10 @@ export interface IGameService {
   getGameById(gameUuid: string): Promise<Game | null>;
 
   getAllFinishGames(playerUuid: string): Promise<Array<Game> | null>;
+
+  getLeaderboard(
+    limit: number,
+  ): Promise<Array<{ playerUuid: string; winRatio: number }> | null>;
 }
 
 export const GAME_SERVICE = Symbol('GAME_SERVICE');

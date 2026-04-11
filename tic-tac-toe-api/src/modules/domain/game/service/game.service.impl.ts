@@ -228,6 +228,12 @@ export class GameServiceImpl implements IGameService {
     return games;
   }
 
+  async getLeaderboard(
+    limit: number,
+  ): Promise<Array<{ playerUuid: string; winRatio: number }> | null> {
+    return await this.userService.getLeaderboard(limit);
+  }
+
   // ─── YORDAMCHI METODLAR ───────────────────────────────────────────────────────
 
   private assertGameIsActive(game: Game, playerUuid: string): void {
@@ -269,6 +275,8 @@ export class GameServiceImpl implements IGameService {
     game: Game,
     playerState: 1 | 2,
   ): Promise<MakeMoveResult> {
+    if (game.getOpponent() === 'player')
+      await this.userService.saveGameResult(game);
     await this.gameRepository.save(game);
     this.gameRepositoryMap.delete(game);
     return this.buildMoveResult(game, playerState);

@@ -12,6 +12,8 @@ import {
 } from 'src/modules/datasource/user/repository/user.repository.interface';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/modules/infrastructure/jwt/jwt.strategy';
+import { Game } from '../../game/model/game.model';
+import { GameState } from '../../game/model/game.model';
 
 @Injectable()
 export class UserServiceImpl implements IUserService {
@@ -86,5 +88,34 @@ export class UserServiceImpl implements IUserService {
         expiresIn: this.config.get('JWT_REFRESH_EXPIRES_IN', '7d'),
       }),
     };
+  }
+
+  async saveGameResult(game: Game): Promise<void> {
+    const gameState: GameState = game.getGameState();
+
+    if (gameState.status === 'win') {
+      const winnerUuid = gameState.winnerPlayer.uuid;
+      const loserUuid =
+        winnerUuid === game.getPlayerX()?.uuid
+          ? game.getPlayerO()?.uuid
+          : game.getPlayerX()?.uuid;
+
+      if (!loserUuid) throw new Error('Loser topilmadi');
+
+      await this.userRepository.incrementWinAndLoss(winnerUuid, loserUuid);
+    } else if (gameState.status === 'draw') {
+      const player1Uuid = game.getPlayerX()?.uuid;
+      const player2Uuid = game.getPlayerO()?.uuid;
+
+      if (!player1Uuid || !player2Uuid) throw new Error('Playerlar topilmadi');
+
+      await this.userRepository.incrementDraws(player1Uuid, player2Uuid);
+    }
+  }
+
+  async getLeaderboard(
+    limit: number,
+  ): Promise<Array<{ playerUuid: string; winRatio: number }> | null> {
+    return this.userRepository.getLeaderboard(limit);
   }
 }

@@ -1,4 +1,5 @@
 import { User } from '../model/user.model';
+import { Game } from '../../game/model/game.model';
 import { JwtPayload } from 'src/modules/infrastructure/jwt/jwt.strategy';
 
 export interface IUserService {
@@ -13,6 +14,12 @@ export interface IUserService {
   refreshTokens(
     payload: JwtPayload,
   ): Promise<{ access_token: string; refresh_token: string }>;
+
+  getLeaderboard(
+    limit: number,
+  ): Promise<Array<{ playerUuid: string; winRatio: number }> | null>;
+
+  saveGameResult(game: Game): Promise<void>;
 }
 
 export const USER_SERVICE = Symbol('USER_SERVICE');

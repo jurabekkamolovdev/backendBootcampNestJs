@@ -90,4 +90,13 @@ export class GameController {
   ) {
     return await this.gameService.getGameById(gameUuid);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('board/:limit')
+  async getLeaderboard(
+    @Request() req: { user: JwtPayload },
+    @Param('limit') limit: number,
+  ) {
+    return this.gameService.getLeaderboard(limit);
+  }
 }

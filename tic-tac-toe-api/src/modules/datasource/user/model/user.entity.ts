@@ -20,4 +20,13 @@ export class UserEntity extends Model {
 
   @Column({ type: DataType.STRING })
   declare passwordHash: string;
+
+  @Column({ type: DataType.INTEGER })
+  declare wins: number;
+
+  @Column({ type: DataType.INTEGER })
+  declare draws: number;
+
+  @Column({ type: DataType.INTEGER })
+  declare losses: number;
 }

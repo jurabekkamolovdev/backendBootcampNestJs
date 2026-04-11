@@ -9,10 +9,20 @@ export class UserDataMapper {
       id: domainUser.getUuid(),
       login: domainUser.getLogin(),
       passwordHash: domainUser.getPasswordHash(),
+      wins: domainUser.getWins(),
+      draws: domainUser.getDraws(),
+      losses: domainUser.getLosses(),
     };
   }
 
   toDomain(entity: IUserEntity): User {
-    return new User(entity.id, entity.login, entity.passwordHash);
+    return new User(
+      entity.id,
+      entity.login,
+      entity.passwordHash,
+      entity.wins,
+      entity.draws,
+      entity.losses,
+    );
   }
 }
